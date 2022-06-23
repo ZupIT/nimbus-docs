@@ -1,3 +1,5 @@
+> Article level: basic.
+
 # Components
 Components are the main structure in Nimbus. Nimbus use a tree to represent the UI and the components are the node of this tree.
 
@@ -81,11 +83,11 @@ Let's see an example for creating a button component.
 ## Frontend
 
 ### Nimbus for Compose (Android)
-TODO: Borracha: Mostrar e explicar um exemplo de como criar um simples componente de botão com enabled?, text e onPress?.
+TODO: Mostrar e explicar um exemplo de como criar um simples componente de botão com enabled?, text e onPress?.
 Escrever em inglês
 
 ### Nimbus for SwiftUI (iOS)
-TODO: Borracha: Mostrar e explicar um exemplo de como criar um simples componente de botão com enabled?, text e onPress?.
+TODO: Mostrar e explicar um exemplo de como criar um simples componente de botão com enabled?, text e onPress?.
 Escrever em inglês
 
 ## Backend
