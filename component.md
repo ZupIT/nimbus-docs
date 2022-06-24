@@ -63,8 +63,12 @@ about actions, please check [this topic](/action.md).
 
 ## Node backend (Typescript)
 
-```jsx
-const screen: Screen = () => (
+```tsx
+import { NimbusJSX } from '@zup-it/nimbus-backend-core'
+import { push } from '@zup-it/nimbus-backend-core/actions'
+import { Screen } from '@zup-it/nimbus-backend-express'
+
+const MyScreen: Screen = () => (
   <Column>
     <Text>Welcome to our app!</Text>
     <Button onPress={push('/next')}>Go to next page</Button>
@@ -135,7 +139,7 @@ Component where the attributes are of type `T`. An `FC` receives the component p
 namespace and name of the component. It can receive an id, properties and state. Just like any other JSX, if the component accepts children, the
 children must be placed inside the opening and closing tags of the component. See the example below:
 
-```typescript
+```tsx
 import { NimbusJSX, WithChildren, FC } from '@zup-it/nimbus-backend-core'
 
 export const Column: FC<WithChildren> = ({ id, children }) => (
@@ -147,15 +151,19 @@ export const Column: FC<WithChildren> = ({ id, children }) => (
 
 Now, to use the component, just import it in your screen:
 
-```typescript
-import { NimbusJSX, Screen } from '@zup-it/nimbus-backend-core'
+```tsx
+import { NimbusJSX } from '@zup-it/nimbus-backend-core'
+import { Screen } from '@zup-it/nimbus-backend-express'
 import { log } from '@zup-it/nimbus-backend-core/actions'
 import { Button } from './components/button'
 
-const screen: Screen = () => (
+const MyScreen: Screen = () => (
   <Button text="Hello World!" onPress={log('Hello World!')} />
 )
 ```
 
 Notice that in the backend we just need to declare a component exists and tell what its attributes are. The actual implementation of the component is
 done in the frontend application.
+
+# Read next
+:point_right: [Action](/action)
