@@ -27,6 +27,7 @@ allprojects {
   // Recommended if you dont want to implement the layout components yourself
   implementation "br.com.zup.nimbus:nimbus-layout-compose:${nimbusComposeLayoutVersion}" 
 ```
+Above, we added both the core Nimbus library and a component library for layout components. Our examples will use both, but if your project won't use the layout components, you don't need to the second dependency.
 
 # Rendering your first server-driven screen
 
