@@ -4,7 +4,7 @@
 ## Pre-requisites
 
 - [Latest Android Studio (recommended)](https://developer.android.com/studio)
-- [Jdk Minimum 1.8](https://www.oracle.com/java/technologies/downloads/)
+- [Java Development Kit (JDK) 1.8 or above](https://www.oracle.com/java/technologies/downloads/)
 - [Jetpack Compose](https://developer.android.com/jetpack/compose)
 - Android API minSdk = 21 
 - Kotlin 1.6.x
