@@ -7,7 +7,7 @@
 - [Java Development Kit (JDK) 1.8 or above](https://www.oracle.com/java/technologies/downloads/)
 - [Jetpack Compose](https://developer.android.com/jetpack/compose)
 - Android API minSdk = 21 
-- Kotlin 1.6.x
+- Kotlin 1.6 or above
 
 # Installing
 You can download the Nimbus library from mavenCentral with the below configuration on your build.gradle
