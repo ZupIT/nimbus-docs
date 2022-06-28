@@ -10,7 +10,16 @@
 - Kotlin 1.6.x
 
 # Installing
-Add to your application build.gradle
+You can download the Nimbus library from mavenCentral with the below configuration on your build.gradle
+
+```
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+}
+
+```
 
 ``` 
   // This is the nimbus compose base library
