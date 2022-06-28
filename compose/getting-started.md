@@ -10,7 +10,7 @@
 - Kotlin 1.6 or above
 
 # Installing
-You can download the Nimbus library from mavenCentral with the below configuration on your build.gradle
+You can download the Nimbus library from mavenCentral by writing the following to your `build.gradle` file:
 
 ```
 allprojects {
