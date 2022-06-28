@@ -33,7 +33,7 @@ fun NimbusButton(text: String, enabled: Boolean = true, onPress: (Any?) -> Unit)
     Button(enabled = enabled, content = { Text(text) }, onClick = { onPress(null) })
 }
 
-//Then when your create the nimbus config, you can sum with the components map like below
+//Then when your create the nimbus config, you can concatenate with the components map like below
 private val config = NimbusConfig(
         baseUrl = BASE_URL,
         components = customComponents + layoutComponents,
