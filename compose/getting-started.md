@@ -6,7 +6,7 @@
 - [Latest Android Studio (recommended)](https://developer.android.com/studio)
 - [Java Development Kit (JDK) 1.8 or above](https://www.oracle.com/java/technologies/downloads/)
 - [Jetpack Compose](https://developer.android.com/jetpack/compose)
-- Android API minSdk = 21 
+- Android SDK: API 21 or above
 - Kotlin 1.6 or above
 
 # Installing
