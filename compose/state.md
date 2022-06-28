@@ -15,15 +15,12 @@ TODO: create and explain the example. Just pass the current value to the functio
 Notice that the component doesn't become coupled to Nimbus. This is exactly what you would do in most other scenarios. The Nimbus lib is responsible
 for providing such function. See how the deserializer for this component work:
 
-TODO: example of deserializer for the component
-
 ## Global State
-TODO: check this text
 To access the Global State in Nimbus Compose you must get use your nimbus instance:
 
 ```kotlin
-val nimbus = Nimbus(baseUrl = "https://my-backend.com")
-val globalState = nimbus.globalState
+Nimbus(config = config) {
+val globalState = nimbusAppState.config.core.globalState
 ```
 
 With a reference to the Global state, you can:
