@@ -18,7 +18,6 @@ allprojects {
         mavenCentral()
     }
 }
-
 ```
 
 ``` 
@@ -35,9 +34,10 @@ Above, we added both the core Nimbus library and a component library for layout 
 
 
 ```kotlin
+const val BASE_URL = "https://gist.githubusercontent.com/hernandazevedozup/eba4f2eb6afd6d6769a549fe037c1613/raw/cd3a897f4384783a1e799bb118a0dbfa8838fcf0"
 class MainActivity : ComponentActivity() {
     private val config = NimbusConfig(
-        baseUrl = "http://myapi.com",
+        baseUrl = BASE_URL,
         components = layoutComponents,
     )
 
@@ -48,64 +48,13 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
                     Nimbus(config = config) {
-                        NimbusNavigator(ViewRequest("/homepage"))
+                        NimbusNavigator(ViewRequest("/1"))
                     }
                 }
             }
         }
     }
 }
-```
-### Create on your endpoint http://myapi.com/homepage the json below
-```
-{
-  "_:component": "layout:row",
-  "children": [
-    {
-      "_:component": "layout:row",
-      "children": [{
-        "_:component": "layout:text",
-        "properties": {
-          "text": "r"
-        }
-      }],
-      "properties": {
-        "flex":2,
-        "backgroundColor": "#FF0000"
-      }
-    },
-    {
-      "_:component": "layout:row",
-      "children": [{
-        "_:component": "layout:text",
-        "properties": {
-          "text": "g"
-        }
-      }],
-      "properties": {
-        "flex":1,
-        "backgroundColor": "#00FF00"
-      }
-    },
-    {
-      "_:component": "layout:row",
-      "children": [{
-        "_:component": "layout:text",
-        "properties": {
-          "text": "b"
-        }
-      }],
-      "properties": {
-        "flex":1,
-        "backgroundColor": "#0000FF"
-      }
-    }]
-}
-```
-
-* Note you can also load this json whithin your app using the code snippet below
-```
-NimbusNavigator(json = YOUR_JSON)
 ```
 
 Run the application. You should see the following interface in the emulator's screen:
@@ -116,7 +65,6 @@ Run the application. You should see the following interface in the emulator's sc
 You can find Nimbus's documentation at this link [**Nimbus Documentation**](https://github.com/ZupIT/nimbus-docs/).
 
 [nimbus-docs]: https://github.com/ZupIT/nimbus-docs/
-
 
 # Read next
 :point_right: [Component](/components)
