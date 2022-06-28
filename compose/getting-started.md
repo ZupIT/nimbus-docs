@@ -108,7 +108,7 @@ class MainActivity : ComponentActivity() {
 NimbusNavigator(json = YOUR_JSON)
 ```
 
-### The result on your app's screen
+Run the application. You should see the following interface in the emulator's screen:
 <img src="https://github.com/ZupIT/nimbus-layout-compose/blob/main/layout/screenshots/debug/br.com.zup.nimbus.compose.layout.LayoutFlexTest_test_layout_1.png" width="228"/>
 
 ## **Documentation**
