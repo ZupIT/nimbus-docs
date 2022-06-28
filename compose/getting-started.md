@@ -22,9 +22,9 @@ allprojects {
 ```
 
 ``` 
-  // This is the nimbus compose base library
+  // Nimbus compose base library
   implementation "br.com.zup.nimbus:nimbus-compose:${nimbusComposeVersion}". 
-  // This is only needed if you dont want to implement the layout components yourself
+  // Recommended if you dont want to implement the layout components yourself
   implementation "br.com.zup.nimbus:nimbus-layout-compose:${nimbusComposeLayoutVersion}" 
 ```
 
