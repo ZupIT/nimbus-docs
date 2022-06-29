@@ -8,7 +8,7 @@ Check the [specification](/specification/action.md) to know more about the defin
 ```kotlin
 /* 
  * Here you define the map that defines the action that will be called for each action name.
- * Example the json action below will be mapped to the showAlert function below
+ * In this example the json action "alert" will be mapped to the showAlert function below
  
         "onPress": [{
           "_:action": "alert",
