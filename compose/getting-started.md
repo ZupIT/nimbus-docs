@@ -13,6 +13,7 @@
 You can download the Nimbus library from mavenCentral by writing the following to your `build.gradle` file:
 
 ```
+//Here you define that your projects need to locate dependencies on maven central repository
 allprojects {
     repositories {
         mavenCentral()
@@ -36,8 +37,10 @@ Above, we added both the core Nimbus library and a component library for layout 
 ```kotlin
 const val BASE_URL = "https://gist.githubusercontent.com/hernandazevedozup/eba4f2eb6afd6d6769a549fe037c1613/raw/cd3a897f4384783a1e799bb118a0dbfa8838fcf0"
 class MainActivity : ComponentActivity() {
+    // Here you define the configurations that nimbus will use to render the views.
     private val config = NimbusConfig(
         baseUrl = BASE_URL,
+        //The components is a map that defines for each component name how to render it
         components = layoutComponents,
     )
 
@@ -47,7 +50,9 @@ class MainActivity : ComponentActivity() {
             AppTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
+                    // For this render tree we use the configuration created above
                     Nimbus(config = config) {
+                        // Here your start a navigation flow that requests a page from $BASE_URL/1
                         NimbusNavigator(ViewRequest("/1"))
                     }
                 }
