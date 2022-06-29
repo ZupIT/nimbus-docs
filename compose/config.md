@@ -86,8 +86,8 @@ Check the [operation specification](/specification/operation.md) to know more ab
 
 ```kotlin
     /* 
-        Here you define that the operation with name "trim" executes the kotlin trim with first argument
-        and returns the trimmed string as the result
+        Here you define that the operation with name "trim" executes the kotlin trim using the first argument
+        passed to the operation and returns the trimmed string as the result
     */
      
     val trim: OperationHandler = { (it[0] as String).trim() }
@@ -100,7 +100,6 @@ Check the [operation specification](/specification/operation.md) to know more ab
         operations = customOperations,
         
         // and so on...
-
 ```
 
 # Read next
