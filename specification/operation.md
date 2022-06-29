@@ -1,5 +1,5 @@
 # Operations
-Operations, along with [State](/state) and [Actions](/action) are what make dynamic content possible in Beagle.
+Operations, along with [State](/state) and [Actions](/action) are what make dynamic content possible in Nimbus.
 
 Operations are pure functions that receive a set of arguments and must return a value based on the arguments they receive. They're used to
 transform a state value.
