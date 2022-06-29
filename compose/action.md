@@ -17,10 +17,8 @@ Check the [specification](/specification/action.md) to know more about the defin
           }
         }] 
   }
-        
-       
- */
-val customActions: Map<String, ActionHandler> = mapOf(
+*/
+    val customActions: Map<String, ActionHandler> = mapOf(
         "alert" to { event: ActionEvent ->
             showAlert(event)
         }
