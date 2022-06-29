@@ -18,24 +18,24 @@ Check the [specification](/specification/action.md) to know more about the defin
         }] 
   }
 */
-    val customActions: Map<String, ActionHandler> = mapOf(
-        "alert" to { event: ActionEvent ->
-            showAlert(event)
-        }
-    )
-
-    fun showAlert(event: ActionEvent) {
-        val text = event.action.properties!!["text"] as String?
-        NimbusTheme.nimbusStaticState?.let {
-            Toast.makeText(it.applicationContext, text, Toast.LENGTH_SHORT).show()
-        }
+val customActions: Map<String, ActionHandler> = mapOf(
+    "alert" to { event: ActionEvent ->
+        showAlert(event)
     }
-    //Then when your create the nimbus config, you can concatenate with the components map like below
-    private val config = NimbusConfig(
-        actions = layoutActions + customActions,
-        baseUrl = BASE_URL,
-        components = customComponents + layoutComponents,
-    )
+)
+
+fun showAlert(event: ActionEvent) {
+    val text = event.action.properties!!["text"] as String?
+    NimbusTheme.nimbusStaticState?.let {
+        Toast.makeText(it.applicationContext, text, Toast.LENGTH_SHORT).show()
+    }
+}
+//Then when your create the nimbus config, you can concatenate with the components map like below
+private val config = NimbusConfig(
+    actions = layoutActions + customActions,
+    baseUrl = BASE_URL,
+    components = customComponents + layoutComponents,
+)
 ```
 
 # Read next
