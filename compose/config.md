@@ -1,9 +1,9 @@
 > Article level: basic.
 
-# Actions
-Check the [specification](/specification/action.md) to know more about the definition of Nimbus Actions. 
+# Configuration
 
 # Creating actions
+Check the [specification](/specification/action.md) to know more about the definition of Nimbus Actions. 
 
 ```kotlin
 /* 
@@ -39,4 +39,4 @@ private val config = NimbusConfig(
 ```
 
 # Read next
-:point_right: [Action](/action)
+:point_right: [Specification](/specification)
