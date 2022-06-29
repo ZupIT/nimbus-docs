@@ -60,7 +60,7 @@ about actions, please check [this topic](/action.md).
 }
 ```
 
-# Custom operations
+# Custom components
 Just like [operations](/operation) and [actions](/actions), Nimbus must provide a way for the developer to register new components. Nimbus ships with
 only a few structural components. To actually build a UI, you need to create your own components or at least use an additional lib that provides such
 components.
