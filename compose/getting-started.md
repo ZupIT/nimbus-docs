@@ -52,7 +52,7 @@ class MainActivity : ComponentActivity() {
                 Surface(color = MaterialTheme.colors.background) {
                     // For this render tree we use the configuration created above
                     Nimbus(config = config) {
-                        // Here your start a navigation flow that requests a page from $BASE_URL/1
+                        // Here your start a navigation flow that requests the json of the first screen from $BASE_URL/1
                         NimbusNavigator(ViewRequest("/1"))
                     }
                 }
