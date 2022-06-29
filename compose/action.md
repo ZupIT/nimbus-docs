@@ -9,13 +9,14 @@ Check the [specification](/specification/action.md) to know more about the defin
 /* 
  * Here you define the map that defines the action that will be called for each action name.
  * In this example the json action "alert" will be mapped to the showAlert function below
- 
+ "properties": {
         "onPress": [{
           "_:action": "alert",
           "properties": {
             "text": "This is the alert text"
           }
         }] 
+  }
         
        
  */
