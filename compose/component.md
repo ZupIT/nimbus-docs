@@ -5,6 +5,10 @@ Check the [specification](/specification/component.md) to know more about the de
 
 # Creating components
 ```kotlin
+/* 
+ * Here you define the map that defines the component that will be called for each component name.
+ * Example in your json the component "_:component": "material:textField" will be mapped to the NimbusTextField below
+ */
 val customComponents: Map<String, @Composable ComponentHandler> = mapOf(
     "material:textField" to @Composable { element, _ , _ ->
         NimbusTextField(
