@@ -3,7 +3,7 @@
 # Configuration
 
 # Creating actions
-Check the [specification](/specification/action.md) to know more about the definition of Nimbus Actions. 
+Check the [action specification](/specification/action.md) to know more about the definition of Nimbus Actions. 
 
 ```kotlin
 /* 
