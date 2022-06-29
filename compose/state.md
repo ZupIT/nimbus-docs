@@ -11,10 +11,15 @@ before sending data to the UI layer that renders the components.
 It's very simple to make an event create an implicit state in Nimbus Compose. See the example below for a component that renders a text input.
 
 ```kotlin
+/* 
+ * Here you define the map that defines the component that will be called for each component name.
+ * Example in your json the component "_:component": "material:textField" will be mapped to the NimbusTextField below
+ */
 val customComponents: Map<String, @Composable ComponentHandler> = mapOf(
     "material:textField" to @Composable { element, _ , _ ->
         NimbusTextField(
             text = element.properties?.get("text") as String,
+            //Deserializes of the event onChange and passing the parameter to the component implementation
             onChange = element.properties!!["onChange"] as (Any?) -> Unit,
         )
     },
@@ -29,7 +34,7 @@ fun NimbusTextField(text: String, onChange: (Any?) -> Unit) {
 ```
 
 ```kotlin
-//Your Activity
+//Then when your create the nimbus config, you can concatenate with the components map like below
 private val config = NimbusConfig(
         baseUrl = BASE_URL,
         components = customComponents + layoutComponents
