@@ -11,19 +11,6 @@ before sending data to the UI layer that renders the components.
 It's very simple to make an event create an implicit state in Nimbus Compose. See the example below for a component that renders a text input.
 
 ```kotlin
-/* 
- * Here you define the map that defines the component that will be called for each component name.
- * Example in your json the component "_:component": "material:textField" will be mapped to the NimbusTextField below
- */
-val customComponents: Map<String, @Composable ComponentHandler> = mapOf(
-    "material:textField" to @Composable { element, _ , _ ->
-        NimbusTextField(
-            text = element.properties?.get("text") as String,
-            //Deserializes of the event onChange and passing the parameter to the component implementation
-            onChange = element.properties!!["onChange"] as (Any?) -> Unit,
-        )
-    },
-)
 
 @Composable
 fun NimbusTextField(text: String, onChange: (Any?) -> Unit) {
@@ -33,26 +20,6 @@ fun NimbusTextField(text: String, onChange: (Any?) -> Unit) {
 }
 ```
 
-```kotlin
-//Then when your create the nimbus config, you can concatenate with the components map like below
-private val config = NimbusConfig(
-        baseUrl = BASE_URL,
-        components = customComponents + layoutComponents
-        )
-        
-        override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            AppTheme {
-                Surface(color = MaterialTheme.colors.background) {
-                    Nimbus(config = config) {
-                        NimbusNavigator(ViewRequest("/home"))
-                    }
-                }
-            }
-        }
-    }
-```
 Notice that the component doesn't become coupled to Nimbus. This is exactly what you would do in most other scenarios. The Nimbus lib is responsible
 for providing such function. See how the deserializer for this component work:
 
