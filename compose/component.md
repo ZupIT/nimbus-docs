@@ -5,24 +5,7 @@ Check the [specification](/specification/component.md) to know more about the de
 
 # Creating components
 Here you define the map that defines the component that will be called for your custom components.
-See the example of json below:
 
-```json
-{
-  "_:component": "material:textField",
-  "properties": {
-    "text": "Hello",
-    "onChange": [
-      {
-        "_:action": "push",
-        "properties": {
-          "url": "/screen2"
-        }
-      }
-    ]
-  }
-}
-```
 ### First step
 You can define you curstom component "_:component": "material:textField" to a composable NimbusTextField like below
 ```kotlin
