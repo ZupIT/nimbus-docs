@@ -23,7 +23,7 @@ See the example of json below:
   }
 }
 ```
-
+### First step
 You can define you curstom component "_:component": "material:textField" to a composable NimbusTextField like below
 ```kotlin
 val customComponents: Map<String, @Composable ComponentHandler> = mapOf(
@@ -41,7 +41,9 @@ val customComponents: Map<String, @Composable ComponentHandler> = mapOf(
         )
     },
 )
+```
 
+### Second step
 ```kotlin
 @Composable
 fun NimbusTextField(text: String, onChange: (Any?) -> Unit) {
@@ -55,7 +57,7 @@ fun NimbusButton(text: String, enabled: Boolean = true, onPress: (Any?) -> Unit)
     Button(enabled = enabled, content = { Text(text) }, onClick = { onPress(null) })
 }
 ````
-
+### Third step
 You must serve the map to nimbus config, also you can provide several maps like below
 ```kotlin
 private val config = NimbusConfig(
