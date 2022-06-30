@@ -37,7 +37,7 @@ interface Action {
 }
 ```
 
-Just like the components, actions have a single required parameter: `_:action`. The properties are:
+Just like the components, actions have a single required parameter: `_:action`. See below the description of each property in an action object:
 - `_:action`: required. The name that identifies the action. It must follow the format: "namespace:name". The only actions that don't need a
 namespace are the default actions that come with any Nimbus implementation. Examples of actions: sendRequest, log, setState, material:alert,
 material:confirm.
@@ -46,108 +46,39 @@ instance, will have a completely different set of properties when compared to a 
 - `metadata`: this is an advanced feature that allows us to pass data that won't be used by the action itself, but might be useful for logging data or
 creating analytics records.
 
+# Example
+```json
+{
+  "_:component": "material:button",
+  "properties": {
+    "text": "click me",
+    "onPress": [{
+      "_:action": "log",
+      "properties": {
+        "message": "The button has been clicked!"
+      }
+    }]
+  }
+}
+```
+
+In the example above, a button is rendered and when it's pressed, it logs a message to the console. We say that "onPress" is the event name and its
+value is the list of actions to execute when the event occurs. Notice that the value is an array. Event values must always be arrays, if a single
+action must run, the array will a have a single Action.
+
 # Default Actions
-Nimbus ships with some important actions already. Below you can find a list with all of them and links to their
-respective API docs.
+Nimbus ships with some basic actions, they are:
 
-- `state.set` (`setState`) [[docs](State#writing-to-a-state) | [api](https://zupit.github.io/nimbus-backend-ts/classes/_zup_it_nimbus_backend_core.StateNode.html#set)]
-- [`alert`](https://zupit.github.io/nimbus-backend-ts/modules/_zup_it_nimbus_backend_core_actions.html#alert);
-- [`confirm`](https://zupit.github.io/nimbus-backend-ts/modules/_zup_it_nimbus_backend_core_actions.html#confirm);
-- [`conditionalAction`](https://zupit.github.io/nimbus-backend-ts/modules/_zup_it_nimbus_backend_core_actions.html#conditionalAction);
-- `sendRequest` [[docs](Making-requests) | [api](https://zupit.github.io/nimbus-backend-ts/modules/_zup_it_nimbus_backend_core_actions.html#sendRequest)];
-- [`addChildren`](https://zupit.github.io/nimbus-backend-ts/modules/_zup_it_nimbus_backend_core_actions.html#addChildren);
-- Navigation (check [[this topic|Navigation]] for more details on navigation actions):
-  - [`openNativeRoute`](https://zupit.github.io/nimbus-backend-ts/modules/_zup_it_nimbus_backend_core_actions.html#openNativeRoute);
-  - [`openExternalUrl`](https://zupit.github.io/nimbus-backend-ts/modules/_zup_it_nimbus_backend_core_actions.html#openExternalUrl);
-  - [`pushStack`](https://zupit.github.io/nimbus-backend-ts/modules/_zup_it_nimbus_backend_core_actions.html#pushStack);
-  - [`popStack`](https://zupit.github.io/nimbus-backend-ts/modules/_zup_it_nimbus_backend_core_actions.html#popStack);
-  - [`pushView`](https://zupit.github.io/nimbus-backend-ts/modules/_zup_it_nimbus_backend_core_actions.html#pushView);
-  - [`popView`](https://zupit.github.io/nimbus-backend-ts/modules/_zup_it_nimbus_backend_core_actions.html#popView);
-  - [`popToView`](https://zupit.github.io/nimbus-backend-ts/modules/_zup_it_nimbus_backend_core_actions.html#popToView);
-  - [`resetStack`](https://zupit.github.io/nimbus-backend-ts/modules/_zup_it_nimbus_backend_core_actions.html#resetStack);
-  - [`resetApplication`](https://zupit.github.io/nimbus-backend-ts/modules/_zup_it_nimbus_backend_core_actions.html#resetApplication);
-- [`submitForm`](https://zupit.github.io/nimbus-backend-ts/modules/_zup_it_nimbus_backend_components.html#submitForm) (available in `@zup-it/nimbus-backend-components`).
+- [log](default-actions/log.md)
+- [setContent](default-actions/log.md)
+- [setState](default-actions/set-state.md)
 
-## Creating your own actions
-It's very simple to create custom Actions. The examples below show how to create an action called "notify". The idea
-is that whenever "notify" is called, a floating message appears in the screen and disappears after a while.
 
-```typescript
-import { Expression, Actions, WithAnalytics } from '@zup-it/nimbus-backend-core'
-import { Action } from '@zup-it/nimbus-backend-core/model/action' // not recommended, we'll see another approach later
+# Custom actions
+Just like [components](/component.md) and [operations](/operation.md), Nimbus must provide a way for the developer to register new actions. Custom
+actions are very useful for doing things like opening dialogs, performing asynchronous tasks, playing animations or sounds, and much more.
 
-interface Notify extends WithAnalytics {
-  /**
-   * The message of the notification.
-   */
-  message: Expression<string>,
-  /**
-   * The title to show in the box.
-   */
-  title?: Expression<string>,
-  /**
-   * The icon to show at the left of the notification.
-   */
-  icon?: Expression<string>,
-  /**
-   * The time in ms to the message disappear.
-   *
-   * @defaultValue `300`
-   */
-  duration?: Expression<number>,
-  /**
-   * The actions to run once the user presses the notification message.
-   */
-  onPress?: Actions,
-}
+How a new action is registered for Nimbus is particular to each implementation. Please check the platform-specific documentation to know more.
 
-/**
- * Creates a floating notification with a message that will disappear after some time.
- *
- * @param properties. See {@link Notify}.
- */
-export function notify({ message, title, icon, onPress, analytics }: Notify) {
-  return new Action({
-    name: 'notify',
-    properties: { message, title, icon, onPress },
-    analytics,
-  })
-}
-```
-
-First, notice that we make a strange import of the class `Action`. This is not recommended, but it's useful for this
-example, in the next we'll show a better way of achieving the same result.
-
-Every Nimbus Action supports analytics and that's why we make `Notify` extend `WithAnalytics`. To know more about the
-Analytics feature, check [[this topic|Analytics]].
-
-The Action factory is the function `notify`. It receives the parameters needed by the action and returns an instance of
-`Action`. To use it, the developer only needs to import it and call `notify({ message: 'Test', title: 'Hey!' })`.
-
-Every action factory will have basically the same code. So, to avoid repetition, instead of instantiating `Action`, you
-should use the function `createAction` that does all of the code above under the hood. In fact, to prevent inefficient
-usage, Nimbus doesn't even export the class `Action` (that's why we needed that weird deep import). See in the example
-below the recommended way of creating actions:
-
-```typescript
-import { Expression, Actions, createAction } from '@zup-it/nimbus-backend-core'
-
-interface Notify {
-  message: Expression<string>,
-  title?: Expression<string>,
-  icon?: Expression<string>,
-  duration?: Expression<number>,
-  onPress?: Actions,
-}
-
-export const notify = createAction<Notify>('notify')
-```
-
-Notice that `Notify` doesn't extend `WithAnalytics` anymore. The `createAction` function knows you're creating an action
-and will take care of this for you.
-
-This second example is much more simple than the first and does the exact same thing. The only difference is that most
-of the code of the first example is now encapsulated in the `createAction` function.
-
-## Keep reading
-**Next topic: [[Navigation]]**
+# Read next
+:point_right: [Default actions](/default-actions.md)
