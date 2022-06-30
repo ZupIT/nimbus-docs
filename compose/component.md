@@ -42,7 +42,7 @@ fun NimbusButton(text: String, enabled: Boolean = true, onPress: (Any?) -> Unit)
 ### Third step
 You must serve the map to nimbus config, also you can provide several maps like below
 ```kotlin
-private val config = NimbusConfig(
+private val nimbus = Nimbus(
         baseUrl = BASE_URL,
         components = customComponents + layoutComponents,
     )
