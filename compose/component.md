@@ -4,10 +4,9 @@
 Check the [specification](/specification/component.md) to know more about the definition of Nimbus Components. 
 
 # Creating components
-Here you define the map that defines the component that will be called for your custom components.
 
 ### First step
-You can define you curstom component "_:component": "material:textField" to a composable NimbusTextField like below
+You can define a custom component that maps to a composable NimbusTextField like below
 ```kotlin
 val customComponents: Map<String, @Composable ComponentHandler> = mapOf(
     "material:textField" to @Composable { element, _ , _ ->
