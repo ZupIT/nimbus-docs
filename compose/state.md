@@ -37,8 +37,8 @@ val customComponents: Map<String, @Composable ComponentHandler> = mapOf(
 To access the Global State in Nimbus Compose you must get use your nimbus instance:
 
 ```kotlin
-Nimbus(config = config) {
-val globalState = nimbusAppState.config.core.globalState
+val nimbus = Nimbus(baseUrl = "https://my-backend.com")
+val globalState = nimbus.globalState
 ```
 
 With a reference to the Global state, you can:
