@@ -11,7 +11,6 @@ before sending data to the UI layer that renders the components.
 It's very simple to make an event create an implicit state in Nimbus Compose. See the example below for a component that renders a text input.
 
 ```kotlin
-
 @Composable
 fun NimbusTextField(text: String, onChange: (Any?) -> Unit) {
     TextField(value = text, onValueChange = {
