@@ -22,6 +22,17 @@ fun NimbusTextField(text: String, onChange: (Any?) -> Unit) {
 Notice that the component doesn't become coupled to Nimbus. This is exactly what you would do in most other scenarios. The Nimbus lib is responsible
 for providing such function. See how the deserializer for this component work:
 
+```kotlin
+val customComponents: Map<String, @Composable ComponentHandler> = mapOf(
+    "material:textField" to @Composable { element, _ , _ ->
+        NimbusTextField(
+            text = element.properties?.get("text") as String,
+            onChange = element.properties!!["onChange"] as (Any?) -> Unit,
+        )
+    }
+)
+```
+
 ## Global State
 To access the Global State in Nimbus Compose you must get use your nimbus instance:
 
