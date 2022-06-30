@@ -4,11 +4,28 @@
 Check the [specification](/specification/component.md) to know more about the definition of Nimbus Components. 
 
 # Creating components
+Here you define the map that defines the component that will be called for your custom components.
+See the example of json below:
+
+```json
+{
+  "_:component": "material:textField",
+  "properties": {
+    "text": "Hello",
+    "onChange": [
+      {
+        "_:action": "push",
+        "properties": {
+          "url": "/screen2"
+        }
+      }
+    ]
+  }
+}
+```
+
+You can define you curstom component "_:component": "material:textField" to a composable NimbusTextField like below
 ```kotlin
-/* 
- * Here you define the map that defines the component that will be called for each component name.
- * Example in your json the component "_:component": "material:textField" will be mapped to the NimbusTextField below
- */
 val customComponents: Map<String, @Composable ComponentHandler> = mapOf(
     "material:textField" to @Composable { element, _ , _ ->
         NimbusTextField(
@@ -25,6 +42,7 @@ val customComponents: Map<String, @Composable ComponentHandler> = mapOf(
     },
 )
 
+```kotlin
 @Composable
 fun NimbusTextField(text: String, onChange: (Any?) -> Unit) {
     TextField(value = text, onValueChange = {
@@ -36,14 +54,15 @@ fun NimbusTextField(text: String, onChange: (Any?) -> Unit) {
 fun NimbusButton(text: String, enabled: Boolean = true, onPress: (Any?) -> Unit) {
     Button(enabled = enabled, content = { Text(text) }, onClick = { onPress(null) })
 }
+````
 
-//Then when your create the nimbus config, you can concatenate with the components map like below
+You must serve the map to nimbus config, also you can provide several maps like below
+```kotlin
 private val config = NimbusConfig(
         baseUrl = BASE_URL,
         components = customComponents + layoutComponents,
     )
 ```
-
 
 # Read next
 :point_right: [Action](/action)
