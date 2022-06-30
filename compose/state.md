@@ -10,15 +10,30 @@ before sending data to the UI layer that renders the components.
 # Implicit states
 It's very simple to make an event create an implicit state in Nimbus Compose. See the example below for a component that renders a text input.
 
-TODO: create and explain the example. Just pass the current value to the function received in the `onChange` attribute.
+```kotlin
+@Composable
+fun NimbusTextField(text: String, onChange: (Any?) -> Unit) {
+    TextField(value = text, onValueChange = {
+        onChange(it)
+    })
+}
+```
 
 Notice that the component doesn't become coupled to Nimbus. This is exactly what you would do in most other scenarios. The Nimbus lib is responsible
 for providing such function. See how the deserializer for this component work:
 
-TODO: example of deserializer for the component
+```kotlin
+val customComponents: Map<String, @Composable ComponentHandler> = mapOf(
+    "material:textField" to @Composable { element, _ , _ ->
+        NimbusTextField(
+            text = element.properties?.get("text") as String,
+            onChange = element.properties!!["onChange"] as (Any?) -> Unit,
+        )
+    }
+)
+```
 
 ## Global State
-TODO: check this text
 To access the Global State in Nimbus Compose you must get use your nimbus instance:
 
 ```kotlin
