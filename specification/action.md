@@ -69,10 +69,13 @@ action must run, the array will a have a single Action.
 # Default Actions
 Nimbus ships with some basic actions, they are:
 
+- [Navigation actions](default-actions/navigation.md)
+- [condition](default-actions/condition.md)
 - [log](default-actions/log.md)
+- [openUrl](default-actions/open-url.md)
+- [sendRequest](default-actions/send-request.md)
 - [setContent](default-actions/log.md)
 - [setState](default-actions/set-state.md)
-
 
 # Custom actions
 Just like [components](/component.md) and [operations](/operation.md), Nimbus must provide a way for the developer to register new actions. Custom
@@ -81,4 +84,4 @@ actions are very useful for doing things like opening dialogs, performing asynch
 How a new action is registered for Nimbus is particular to each implementation. Please check the platform-specific documentation to know more.
 
 # Read next
-:point_right: [Default actions](/default-actions.md)
+:point_right: [TODO](/todo_link)
