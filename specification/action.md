@@ -70,12 +70,12 @@ action must run, the array will a have a single Action.
 Nimbus ships with some basic actions, they are:
 
 - [Navigation actions](default-actions/navigation.md)
-- [condition](default-actions/condition.md)
-- [log](default-actions/log.md)
-- [openUrl](default-actions/open-url.md)
-- [sendRequest](default-actions/send-request.md)
-- [setContent](default-actions/log.md)
-- [setState](default-actions/set-state.md)
+- [`condition`](default-actions/condition.md)
+- [`log`](default-actions/log.md)
+- [`openUrl`](default-actions/open-url.md)
+- [`sendRequest`](default-actions/send-request.md)
+- [`setContent`](default-actions/log.md)
+- [`setState`](default-actions/set-state.md)
 
 # Custom actions
 Just like [components](/component.md) and [operations](/operation.md), Nimbus must provide a way for the developer to register new actions. Custom

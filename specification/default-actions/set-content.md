@@ -1,4 +1,4 @@
-# `setContent`
+# setContent
 This action changes the UI tree by adding a new component as a child of an existing component or replacing it entirely. The properties for the
 `setContent` action are:
 
