@@ -20,6 +20,7 @@ interface PushProperties {
   data?: any,
   headers?: Record<string, string>,
   fallback?: Component,
+  prefetch?: boolean,
 }
 ```
 
@@ -30,6 +31,9 @@ Where:
 - `data` is the json data to send in the request body. This is only valid for Patch, Put and Post requests.
 - `headers` is the map of headers to send in the request.
 - `fallback` is a UI tree to render if the request fails.
+- `prefetch` is a boolean that, when true, makes the frontend application load the contents of the screen we wish to navigate to as soon as possible.
+This way, when the button is pressed, the navigation is immediate. Be careful with this, setting every navigation to `prefetch: true` may result high
+and unnecessary internet traffic for the user. If a prefetch request fails the navigation behaves like `prefetch` was false.
 
 When `fallback` is not provided and the request fails, Nimbus should render an error component. This error component should be customizable by the
 user via a library configuration.
