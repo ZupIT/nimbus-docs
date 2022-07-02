@@ -9,6 +9,8 @@ States are the Nimbus way of creating and manipulating a value that can shared a
 equivalence to variables in programming languages, they can be declared (local states), some are global (global
 state) and others are injected into your code (implicit states).
 
+The UI tree responds to every modification of a state value, it's dynamic!
+
 **Important**: States are variables of Nimbus, they're not variables of your backend application, i.e. Nimbus States are resolved
 when the code is run by the frontend, and not when the request is made to the server.
 
