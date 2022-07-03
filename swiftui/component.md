@@ -52,7 +52,7 @@ struct CustomButton: View {
 }
 ```
 
-The implementation use `Button` and a `.disabled(Bool)` modifier both APIs from SwiftUI.
+The implementation uses `Button` and a `.disabled(Bool)` modifier, both are APIs from SwiftUI.
 
 ### Component map
 
