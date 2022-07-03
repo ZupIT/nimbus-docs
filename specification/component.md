@@ -12,27 +12,37 @@ Imagine a UI with a column containing a welcoming text at the top and a button b
   - Text
   - Button
 
-Each of the elements of the tree above is a component. To be able to render a UI tree declared in the backend in the frontend, Nimbus serializes the
+Each of the nodes of the tree above is a component. To be able to render a UI tree declared in the backend in the frontend, Nimbus serializes the
 UI tree into a JSON and deserializes it into the actual components before rendering it.
 
-A Nimbus component is defined by the following properties:
+A Nimbus component is defined by the following structure:
 
-- `_:component`: required. The name that identifies the component. It must follow the format: namespace:name. The only components that don't need a
-namespace are the default components that come with any Nimbus implementation. Examples: if, forEach, layout:text, material:button, layout:column.
-- `id`: a unique id for the node (considering the tree). When not specified, a random id is assigned by the frontend.
+```typescript
+interface Component {
+  '_:component': string,
+  id?: string,
+  properties?: Record<string, any>,
+  state?: {
+    id: string,
+    value: any,
+  },
+  children?: Node[],
+}
+```
+
+Where:
+- `_:component`: required. The name that identifies the component. It must follow the format: "namespace:name". The only components that don't need a
+namespace are the default components that come with any Nimbus implementation. Examples of component names: if, forEach, layout:text, material:button,
+layout:column.
+- `id`: a unique id for the node within a UI tree. When not specified, a random id is assigned by the frontend.
 - `properties`: a map with the properties for the component. If this is a text, for instance, this could be "text: string", "fontSize: double",
 "fontWeight: integer".
-- `state`: declares a [state](/state) visible to this node and its descendants.
+- `state`: declares a [state](state.md) visible to this node and its descendants.
 - `children`: the nodes that are children of this node. When absent, null or an empty array, this node is a leaf.
 
 # Using components
 To create a UI with components, we use the backend. See the examples below for creating the UI described in the previous section: a column with a
 welcoming text and a button to go to another screen.
-
-> Attention: the components used in the examples below are not available in the main Nimbus library.
-
-Notice that `material:button`, in the examples below, has the property `onPress`. This is an event and it can be assigned to actions. To know more
-about actions, please check [this topic](/action.md).
 
 ```json
 {
@@ -41,33 +51,37 @@ about actions, please check [this topic](/action.md).
     {
       "_:component": "layout:text",
       "properties": {
-        "text": "Welcome to our app!"
-      }
+        "text": "Hello"
+      },
     },
     {
-      "_:component": "material:button",
+      "_:component": "layout:text",
       "properties": {
-        "text": "Go to next page",
-        "onPress": [{
-          "_:action": "push",
-          "properties": {
-            "url": "/next"
-          }
-        }]
+        "text": "World"
       }
     }
   ]
 }
 ```
 
+The JSON above renders a column with two texts: "Hello" in the first line and "World" in the second line. It's important to notice that these
+components are part of the library ["Nimbus Layout"](todo_link) and are not included in any Nimbus implementation. The intention here is just to show
+an example of a JSON.
+
+# Default components
+The Nimbus specification declares 2 structural components, i.e. any implementation must have them. The components shipped with Nimbus are:
+
+- [if, then, else](default-components/if.md);
+- [forEach](default-components/for-each.md).
+
 # Custom components
-Just like [operations](/operation) and [actions](/actions), Nimbus must provide a way for the developer to register new components. Nimbus ships with
-only a few structural components. To actually build a UI, you need to create your own components or at least use an additional lib that provides such
-components.
+Just like [operations](operation.md) and [actions](actions.md), Nimbus must provide a way for the developer to register new components. Nimbus ships
+with only a few structural components. To actually build a UI, you need to create your own components or at least use an additional lib that provides
+such components.
 
 New components must be implemented in the frontend and declared in the backend.
 
 How a new component is registered for Nimbus is particular to each implementation. Please check the platform-specific documentation to know more.
 
 # Read next
-:point_right: [Action](/action)
+:point_right: [State](/state)
