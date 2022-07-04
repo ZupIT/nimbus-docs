@@ -19,8 +19,9 @@ Local states are declared by the backend application in the body of a Component.
 component can receive the attribute `state`.
 
 A Local state is declared with 2 properties:
-- `id`: required. An id to identify the state. Think this as the variable name. This is a string and it must match the regex `/^([a-z]|[A-Z]|_)\w*$/`,
-i.e. it must be comprised of only letters, numbers and underscore; it can't start with a number.
+- `id`: required. An id to identify the state. Think this as the variable name. This is a string and it must match the regex
+`/^(?!(true$|false$|null$))([a-z]|[A-Z]|_)\w*$/`, i.e. it must be comprised of only letters, numbers and underscore; it can't start with a number;
+it can't be either "true", "false" or "null".
 - `value`: the initial value for this state, can be of any type. If not provided, null is used.
 
 This type of state is said to be local because its scope is only the node where it's declared and its descendants. Any node above or at the same
