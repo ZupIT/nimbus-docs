@@ -67,9 +67,9 @@ a [state](state.md), part of a state or execute an [operation](operation.md). Se
 - Operation: `"gt(person.age, 18)"`
 
 ## Grammar
-This topic is not important unless you are implementing this feature or really want to know how expressions are built.
+**This topic is not important unless you are implementing this feature or really want to know how expressions are built.**
 
-To recognize and parse an expression, we must define the grammar that defines the language that represent every possible Nimbus expression.
+To recognize and parse an expression, we must define the grammar that recognizes the language representing every possible Nimbus expression.
 
 If the language that rules expressions was regular, then it would be simple, we'd be able to use a regular expression. This is not the case though,
 expressions may be comprised of operations and the number of opening parenthesis must be equal to the number of closing parenthesis. This means the
