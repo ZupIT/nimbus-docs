@@ -1,3 +1,6 @@
+# Disclaimer
+This is a work in progress. Just like every Nimbus library, the documentation is in beta stage. Feel free to contribute!
+
 # Introduction
 The Nimbus SDUI is:
 
