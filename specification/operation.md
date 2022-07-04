@@ -9,8 +9,9 @@ writing the expression `"@{user.name}"`, we can use an operation: ``"@{uppercase
 in a string to uppercase.
 
 Operations are always used inside expressions and they must follow the pattern `name_of_the_operation(argument1, argument2, ...)`. The name of the
-operation is the string that identifies the function to use in the frontend and it must be comprised of only letters, numbers and underline ("_"), it
-also can't start with a number. In other words, the operation name must match the regex `/^([a-z]|[A-Z]|_)\w*$/`.
+operation is the string that identifies the function to use in the frontend and it must be comprised of only letters, numbers and underline ("_"); it
+can't start with a number; and it can't be either "true", "false" or "null". In other words, the operation name must match the regex
+`/^(?!(true$|false$|null$))([a-z]|[A-Z]|_)\w*$/`.
 
 An operation argument can be:
 - A state path. Examples: `myState`, `user.name`, `global.cart.length`.

@@ -76,9 +76,9 @@ const MyScreen: Screen = () => (
 In the code above we declared `user` to the root component, i.e. it will be accessible by every component in the screen.
 After declaring the state, we printed the user name using the state api.
 
-Notice that we don't need to use expression strings when using the Nimbus backend for Typescript lib. A State is an object that can be used directly
-in the UI structure and will be serialized into expressions when needed. This is important so we can have type-safety when using states and
-expressions, which is something we can't have in plain JSON.
+Notice that we don't need to use [expression strings](expression.md) when using the Nimbus backend for Typescript lib. A State is an object that can
+be used directly in the UI structure and will be serialized into expressions when needed. This is important so we can have type-safety when using
+states and expressions, which is something we can't have in plain JSON.
 
 > Important: when using the Nimbus Backend for Typescript, the developer never needs to write expressions, the state API is enough and is type-safe!
 
@@ -184,8 +184,9 @@ export const MyScreen: Screen = () => <>Hello {globalState.get('user').get('name
 The Global State is the only type of Nimbus State that can be both read and written outside Beagle. Read the next section for more details.
 
 # Manipulating State Values from the backend
-To change a state value, we must use the [action](/action.md) `setState`, but in the backend for typescript, you shouldn't use the `setState` action directly. Instead, you should use the method `set` of a State object, this returns an instance of the `setState` action and is much easier to use. 
-See the example below:
+To change a state value, we must use the [action](action.md) [`setState`](default-actions/set-state.md), but in the backend for typescript, you
+shouldn't use the `setState` action directly. Instead, you should use the method `set` of a State object, this returns an instance of the `setState`
+action and is much easier to use. See the example below:
 
 ```tsx
 const user = createState<User>('user', {
