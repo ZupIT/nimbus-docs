@@ -48,3 +48,6 @@ private val nimbus = Nimbus(
     actions = customActions,
 )
 ```
+
+# Read next
+:point_right: [Configuration](configuration.md)
