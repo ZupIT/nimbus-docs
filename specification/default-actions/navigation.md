@@ -26,7 +26,7 @@ interface PushProperties {
 
 Where:
 - `url` is the address to send the request to. If this url is relative, i.e. if it starts with a "/", then it will be appended to the
-[baseUrl](todo_link).
+`baseUrl`, which is a property that must be setup by the frontend lib and represents the URL of the backend server.
 - `method` is the request method. Default is `'Get'`.
 - `data` is the json data to send in the request body. This is only valid for Patch, Put and Post requests.
 - `headers` is the map of headers to send in the request.

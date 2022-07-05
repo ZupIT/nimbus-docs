@@ -103,4 +103,4 @@ This second example is much more simple than the first and does the exact same t
 of the code of the first example is now encapsulated in the `createAction` function.
 
 # Read next
-:point_right: [TODO](/todo_link)
+:point_right: [Expressions](expression.md)

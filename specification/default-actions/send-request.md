@@ -15,7 +15,7 @@ interface SendRequestProperties {
 
 Where:
 - `url` is the address to send the request to. If this url is relative, i.e. if it starts with a "/", then it will be appended to the
-[baseUrl](todo_link).
+`baseUrl`, which is a property that must be setup by the frontend lib and represents the URL of the backend server.
 - `method` is the request method. Default is `'Get'`.
 - `data` is the json data to send in the request body. This is only valid for Patch, Put and Post requests.
 - `headers` is the map of headers to send in the request.
@@ -133,11 +133,11 @@ Let's create a UI that shows a product list. This product list will be loaded by
 ```
 
 The UI above first declares the state `product` and initializes it with `[]`. Then, it uses the component `layout:lifecycle` to attach an action
-to the event `onInit`. this component is not part of the Nimbus specification, but is implemented by [this library](todo_link). This component just
-manages events related to the component lifecycle, `onInit` runs when the component is first rendered.
+to the event `onInit`. this component is not part of the Nimbus specification, but is implemented by [this library](/layout/index.md). This component
+just manages events related to the component lifecycle, `onInit` runs when the component is first rendered.
 
 We tell the UI, after it's first rendered, it should make a request to fetch the list of products from the backend. If the request succeeds,
 we store the result in the state `products`. If the request fails, we log an error message with the request status.
 
 The visual elements are comprised by a title and a loop structure that goes over every item in the state `products` and create a set of components
-based on the template (children of the component [`forEach`](todo_link)).
+based on the template (children of the component [`forEach`](../default-components/for-each.md)).
