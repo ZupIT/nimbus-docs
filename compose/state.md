@@ -1,5 +1,3 @@
-> Article level: intermediary.
-
 # State
 To check the definition of a State in Nimbus and its purposes, please check the [specification](specification/state).
 
@@ -8,33 +6,33 @@ Nimbus compose takes care of the local states for you. You don't need to worry a
 before sending data to the UI layer that renders the components.
 
 # Implicit states
-It's very simple to make an event create an implicit state in Nimbus Compose. See the example below for a component that renders a text input.
+It's very simple to create Components with events that use implicit states. See the example below for a component that renders a text input.
 
 ```kotlin
 @Composable
-fun NimbusTextField(text: String, onChange: (Any?) -> Unit) {
+fun NimbusTextField(text: String, onChange: (String) -> Unit) {
     TextField(value = text, onValueChange = {
         onChange(it)
     })
 }
 ```
 
-Notice that the component doesn't become coupled to Nimbus. This is exactly what you would do in most other scenarios. The Nimbus lib is responsible
-for providing such function. See how the deserializer for this component work:
+Notice that the component doesn't become coupled to Nimbus. This is exactly what you would do for any Component in Compose. The `onChange` function
+will be provided by Nimbus and only need to be correctly deserialized in the component map.
 
 ```kotlin
 val customComponents: Map<String, @Composable ComponentHandler> = mapOf(
     "material:textField" to @Composable { element, _ , _ ->
         NimbusTextField(
             text = element.properties?.get("text") as String,
-            onChange = element.properties!!["onChange"] as (Any?) -> Unit,
+            onChange = { (element.properties!!["onChange"] as (Any?) -> Unit)(it) },
         )
     }
 )
 ```
 
 ## Global State
-To access the Global State in Nimbus Compose you must get use your nimbus instance:
+To access the Global State in Nimbus Compose you must use your nimbus instance:
 
 ```kotlin
 val nimbus = Nimbus(baseUrl = "https://my-backend.com")
@@ -48,3 +46,6 @@ replaced by `newValue`. To set user's name, for instance: `globalState.set("John
 created.
 - listen to changes: `onChange(listener)`. Subscribes to changes in the global state. `listener` must be a function that receives nothing and returns
 nothing. The `onChange` function returns another function that, when called, removes the listener from the state.
+
+## Read next
+:point_right: [Operations](operation.md)
