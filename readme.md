@@ -19,7 +19,7 @@ Nimbus libraries that are currently being implemented and are in beta stages:
   - [Nimbus for Jetpack Compose, Android (Kotlin)](https://github.com/ZupIT/nimbus-compose)
   - [Nimbus for SwiftUI, iOS (Swift)](https://github.com/ZupIT/nimbus-swiftui)
   - [Nimbus core (shared code between all frontend implementations - Kotlin)](https://github.com/ZupIT/nimbus-core)
-- Frontend components
+- Components
   - [Layout components for Nimbus Backend TS](https://github.com/ZupIT/nimbus-backend-ts/tree/feat/nimbus-back-ts/components)
   - [Layout components for Nimbus Compose](https://github.com/ZupIT/nimbus-layout-compose)
   - [Layout components for Nimbus SwiftUI](https://github.com/ZupIT/nimbus-layout-swiftui)
