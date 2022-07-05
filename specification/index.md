@@ -2,7 +2,11 @@
 This series of documents are the official definition of how [Nimbus](/readme.md) should work as a protocol. Every implementation of Nimbus must
 reflect the definitions written in here.
 
-All examples in these documents use JSON or Typescript. We chose to use Typescript due to its easy of writing for conveying types.
+All examples in these documents use JSON or Typescript. We chose to use Typescript due to its easy of writing type definitions. These examples
+also use components that are not part of the specification, consider them as components declared by the application.
+
+Most of the components used in the examples, although not part of the specification, are implemented in our
+[layout component library](/layout/index.md).
 
 ## Topics
 - [Components](component.md)

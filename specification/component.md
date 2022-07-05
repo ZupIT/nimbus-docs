@@ -64,9 +64,7 @@ welcoming text and a button to go to another screen.
 }
 ```
 
-The JSON above renders a column with two texts: "Hello" in the first line and "World" in the second line. It's important to notice that these
-components are part of the library ["Nimbus Layout"](todo_link) and are not included in any Nimbus implementation. The intention here is just to show
-an example of a JSON.
+The JSON above renders a column with two texts: "Hello" in the first line and "World" in the second line.
 
 # Default components
 The Nimbus specification declares 2 structural components, i.e. any implementation must have them. The components shipped with Nimbus are:

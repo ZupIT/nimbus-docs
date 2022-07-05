@@ -1,5 +1,5 @@
 # log
-Logs a message. How the message is logged id defined by the [Logger](TODO_link).
+Logs a message to the platform console. If the frontend library allows for log customization, this Logger will be used.
 
 The properties of the log action must follow the structure:
 

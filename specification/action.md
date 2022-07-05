@@ -82,6 +82,3 @@ Just like [components](/component.md) and [operations](/operation.md), Nimbus mu
 actions are very useful for doing things like opening dialogs, performing asynchronous tasks, playing animations or sounds, and much more.
 
 How a new action is registered for Nimbus is particular to each implementation. Please check the platform-specific documentation to know more.
-
-# Read next
-:point_right: [TODO](/todo_link)
