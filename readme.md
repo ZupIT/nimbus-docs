@@ -14,11 +14,13 @@ An application that uses Nimbus will have:
 
 Nimbus libraries that are currently being implemented and are in beta stages:
 - Backend
-  - [Nimbus for Node and layout components (Typescript)](https://github.com/ZupIT/nimbus-backend-ts)
+  - [Nimbus for Node (Typescript)](https://github.com/ZupIT/nimbus-backend-ts)
 - Frontend
   - [Nimbus for Jetpack Compose, Android (Kotlin)](https://github.com/ZupIT/nimbus-compose)
   - [Nimbus for SwiftUI, iOS (Swift)](https://github.com/ZupIT/nimbus-swiftui)
+  - [Nimbus core (shared code between all frontend implementations - Kotlin)](https://github.com/ZupIT/nimbus-core)
 - Frontend components
+  - [Layout components for Nimbus Backend TS](https://github.com/ZupIT/nimbus-backend-ts/tree/feat/nimbus-back-ts/components)
   - [Layout components for Nimbus Compose](https://github.com/ZupIT/nimbus-layout-compose)
   - [Layout components for Nimbus SwiftUI](https://github.com/ZupIT/nimbus-layout-swiftui)
 
@@ -51,6 +53,7 @@ What to expect for the next betas:
 goal for the next beta is to find a way to automatically do this or at least make it much easier.
 - Navigation: we currently only support navigating from a server driven screen to another server driven screen. We need to develop a system to allow
 for a better integration between native screens and server driven screens.
+- Grids in the layout lib for Nimbus SwiftUI.
 - A small lib of design system components to showcase what Nimbus is capable of: button, text-input, toggle, etc.
 - Hot reloading between the backend lib and the frontend libs.
 - A web version of the documentation.
@@ -58,19 +61,14 @@ for a better integration between native screens and server driven screens.
 - Fixes to whatever bug we find in the way.
 
 ## Getting started
-- Getting started with Nimbus for Node (Backend)
-- Getting started with Nimbus for Jetpack Compose (Android)
-- Getting started with Nimbus for SwiftUI (iOS)
+- [Getting started with Nimbus for Node (Backend)](backend-ts/getting-started.md)
+- [Getting started with Nimbus for Jetpack Compose (Android)](compose/getting-started.md)
+- [Getting started with Nimbus for SwiftUI (iOS)](swiftui/getting-started.md)
 
 ## Documentation
-- Component
-- Structural Components
-- State
-- Action
-- Default Actions
-- Operation
-- Default Operations
-
-## Specification
-Use [this article](/specification.md) to know everything about Nimbus as an specification. this is very useful for creating your own implementation of
-Nimbus.
+- [Nimbus Specification](specification/index.md)
+- [Nimbus Backend TS](backend-ts/index.md)
+- [Nimbus Compose](compose/index.md)
+- [Nimbus SwiftUI](swiftui/index.md)
+- [Nimbus Core (shared code between the frontend libs)](core/index.md)
+- [Layout components](layout/index.md)
