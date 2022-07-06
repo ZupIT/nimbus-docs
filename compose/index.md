@@ -1,4 +1,4 @@
-# Specification
+# Nimbus Compose
 This is the documentation for the Nimbus implementation concerning Jetpack Compose, on Android.
 
 To start, we recommend reading our [getting started](getting-started.md), but you can also use the next section to navigate through the documentation
