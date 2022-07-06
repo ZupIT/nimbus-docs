@@ -35,7 +35,7 @@ let package = Package(
 ```
 > Attention: We added component library `NimbusLayoutSwiftUI` and `NimbusSwiftUI` (resolved automatically). Our examples will use both, but if your project won't use the layout components, use only the `NimbusSwiftUI`(url: https://github.com/ZupIT/nimbus-swiftui.git).
 
-## 2. Creating an Nimbus entrypoint
+## 2. Creating a Nimbus entrypoint
 To start, we must create an instance of the server driven tool and pass our configuration.
 
 ```swift
