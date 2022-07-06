@@ -27,7 +27,7 @@ allprojects {
 Above, we added both the core Nimbus library and a component library for layout components. Our examples will use both, but if your project won't use the layout components, you don't need to the second dependency.
 
 ## 2. Adding permissions
-Just like any other Android application that makes network requests. To use Nimbus, you must add Internet permissions to your manifest. To more details
+Just like any other Android application that makes network requests. To use Nimbus, you must add Internet permissions to your manifest. For more details
 on this, please check [the official Android documentation](https://developer.android.com/training/basics/network-ops/connecting).
 
 ## 3. Creating an instance of Nimbus
