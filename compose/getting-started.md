@@ -26,7 +26,11 @@ allprojects {
 ```
 Above, we added both the core Nimbus library and a component library for layout components. Our examples will use both, but if your project won't use the layout components, you don't need to the second dependency.
 
-## 2. Creating an instance of Nimbus
+## 2. Adding permissions
+Just like any other Android application that makes network requests. To use Nimbus, you must add Internet permissions to your manifest. To more details
+on this, please check [the official Android documentation](https://developer.android.com/training/basics/network-ops/connecting).
+
+## 3. Creating an instance of Nimbus
 To start, we must create an instance of the server driven tool and pass our configuration.
 
 ```kotlin
@@ -47,7 +51,7 @@ Nimbus has a lot of customizations and they're mostly done via the constructor f
 Above, we used a gist in Github to show an example. In real applications, this would be the url to your backend server, i.e. the application that
 provides the JSON for the server driven views.
 
-## 3. Providing nimbus to the UI tree
+## 4. Providing nimbus to the UI tree
 The next step is to tell the UI tree that, from that node and forward, every time nimbus is requested, the instance of nimbus we just created must
 be used.
 
@@ -77,7 +81,7 @@ class MainActivity : ComponentActivity() {
 }
 ```
 
-## 4. Rendering a server driven view
+## 5. Rendering a server driven view
 To render a server driven view, we need a Nimbus Navigator. This is because, a server driven view may not be just one view, it can have instructions
 like "go to another server driven view" or "go back to the previous server driven view".
 
@@ -111,7 +115,7 @@ class MainActivity : ComponentActivity() {
 }
 ```
 
-## 5. Running
+## 6. Running
 After running the application, you should see the following interface in the emulator's screen:
 
 <img src="https://github.com/ZupIT/nimbus-layout-compose/blob/main/layout/screenshots/debug/br.com.zup.nimbus.compose.layout.LayoutFlexTest_test_layout_1.png" width="228"/>
