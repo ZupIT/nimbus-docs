@@ -117,4 +117,4 @@ After running the application, you should see the following interface in the emu
 <img src="https://github.com/ZupIT/nimbus-layout-compose/blob/main/layout/screenshots/debug/br.com.zup.nimbus.compose.layout.LayoutFlexTest_test_layout_1.png" width="228"/>
 
 ## Read next
-:point_right: [Component](/component)
+:point_right: [Component](component)
