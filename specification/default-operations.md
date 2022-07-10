@@ -1,14 +1,12 @@
 # Operations shipped with Nimbus
 The Nimbus specification provides a set of operations that must exist in any implementation. They are:
 
-## Arithmetic
+## Number
 - `sum(...numbers)`: sums all parameters passed and returns the result. Example: `@{sum(1, 2.5, 3, 1)}` results in `7.5`.
 - `subtract(...numbers)`: starts with the first parameter, then subtract each next parameter from it. Returns the result. Example: `@{sum(10, 5, 3)}` 
 results in `2`.
 - `multiply(...numbers)`: multiply every parameter with the next, the result is returned. Example: `@{sum(10, 5, 3)}` results in `2`.
 - `divide(...numbers)`: divide every parameter by the next, the result is returned. Example: `@{divide(10, 2.5)}` results in `4`.
-
-## Number comparisons
 - `gt(left, right)`: returns true if the left number is greater than the right number. Example: `@{gt(10, 5)}` results in true while `@{gt(10, 10)}`
 and `@{gt(10, 9)}` result in false.
 - `gte(left, right)`: returns true if the left number is greater than or equal to the right number. Example: `@{gte(10, 5)}` and `@{gte(10, 10)}`
