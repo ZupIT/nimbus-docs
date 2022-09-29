@@ -6,23 +6,9 @@ configurable property, what they do and examples of how to change the default be
 The base url to use when dealing with relative URLs in both the frontend and the server driven views (JSONs). This should be the URL to the server
 that provides the server driven views.
 
-## components
-The map of components to use for building the server driven views. Each key is the component name and each value is a Composable function that
-deserializes the UI Node and renders the Composable component.
-
-To know more about creating components, check [this](component.md) topic.
-
-## actions
-The map of actions to use for building the server driven views. Each key is the action name and each value is an Action handler, i.e. a function
-that receives an `ActionEvent`, interpret it, and run the action. An Action handler returns nothing.
-
-To know more about creating actions, check [this](action.md) topic.
-
-## operations
-The map of operations to use for building the server driven views. Each key is the operations name and each value is the function that implements
-the operation.
-
-To know more about creating operations, check [this](operation.md) topic.
+## ui
+The list of libraries containing the [components](component.md), [actions](action.md) and [operations](operation.md) for building the server driven
+views.
 
 ## logger
 The application's [Logger](/core/index.md#logger).

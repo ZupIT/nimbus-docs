@@ -19,41 +19,45 @@ let log: Action = { event in
 }
 ```
 
+> Attention: right now we have to deal with untyped data and manually deserialize the property map. We intend to improve this experience before a
+stable release.
+
 We get the property "message" from the event, cast to expected type `String` and print it to the console if message is not nil.
 
-`Action` is a typealias for `(ActionEvent) -> KotlinUnit?`. `KotlinUnit?` represents void and we should return nil.
-An `ActionEvent` has the following properties:
+`Action` is a typealias for `(ActionTriggeredEvent) -> void?`. An `ActionEvent` has the following properties:
 
-- `action`: the action triggered by the event. Use this object to find the name of the action, its properties and metadata.
-- `name`: the name of the event that triggered the action, i.e. the key of the node property that declared it. Example: a component "Button" triggers
-the action found in the property "onPress" when it's pressed. "onPress" is the "name" of this event.
-- `node`: the node (component) containing the action.
-- `view`: the view (`ServerDrivenView`) containing the node that declared the action.
-
-For most action handlers, we'll only need `event.action.properties`.
+- `action`: the action triggered by the event. Use this object to find the name of the action, its properties and metadata. This will be the only
+information you'll need for almost every action handler you'll write.
+- `scope`: the scope where the action was triggered. This will always be a `ServerDrivenEvent` and contain information like the event name and the
+entire scope hierarchy. Example of scope hierarchy: this event > parent event > node > another node > view > nimbus. Any of these scopes can be
+retrieved via the `parent` pointer.
+- `dependencies`: tell the Nimbus lifecycle which dependencies may have changed so it can propagate updates through its dependency graph. You'll
+probably never need to use this, but it's used by the core action `setState` to update the UI after a state changes its value.
 
 ### 2. Register the action handler
-You must create the structure that maps the action name to its handler. This is the map we pass in the function `actions` when configuring the `Nimbus` entrypoint. 
-See the example below:
+You must register the action to a UI Library.
 
 ```swift
-let actions: [String: Action] = ["myApp:log": log]
+let myAppUI = NimbusSwiftUILibrary("myApp")
+  .addAction("log", handler: log)
 ```
 
 Whenever the action "myApp:log" is used by a server driven view, the function `log` will be called with the event. 
 
-### 3. Certify your action map is configured in the Nimbus entrypoint
+### 3. Certify your UI Library is registered to your Nimbus instance
 ```swift
-Nimbus(baseUrl: "base") {
-  // Your navigator here
+import SwiftUI
+import NimbusSwiftUI
+
+struct ContentView: View {
+  var body: some View {
+    Nimbus(baseUrl: "my-base-url") {
+      // Your navigator here
+    }
+    .ui([layout, myAppUI])
+  }
 }
-// another configurations as .components(components) here
-.actions(actions)
 ```
 
 # Read next
 :point_right: [Configuration](configuration.md)
-
-
-# Read next
-:point_right: [TODO](/todo_link)

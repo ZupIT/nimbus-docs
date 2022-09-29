@@ -13,10 +13,6 @@ Components inside a template have ids just like any other node in the tree. When
 generate duplicates. `forEach` appends `:$key_value` to the id of every node in the template, where `$key_value` is the value of the property `key`.
 If `key` isn't specified, it uses the current iteration index.
 
-> Attention: the action `setContent` can't be used to set the content created by the `forEach` component. This is because any change in the array of
-items would undo a change done by the `setContent` action. If you wish to dynamically change the UI created with `forEach`, please change its array
-of items instead.
-
 ## Properties
 ```typescript
 interface ForEachProperties {
@@ -32,7 +28,7 @@ Where:
 - `iteratorName` is the name of the implicit state created to contain the current item of the iteration. Default is `item`.
 - `indexName` is the name of the implicit state created to contain the index of the current iteration. Default is `index`.
 - `key` is the name of the property of each item in `items` that can be used to identify it. By default, `forEach` uses the current index of the
-iteration. It is a best practice to always specify a key. Specifying a key will make the rendering faster and even prevent bugs.
+iteration. It is a best practice to always specify a key. Specifying a key will make the rendering faster and prevent undesired behavior.
 
 ## Example
 ```json
@@ -48,7 +44,7 @@ iteration. It is a best practice to always specify a key. Specifying a key will 
   },
   "children": [
     {
-      "_:component": "material:text",
+      "_:component": "layout:text",
       "properties": {
         "text": "Here's all the people in the database:"
       }
@@ -64,21 +60,21 @@ iteration. It is a best practice to always specify a key. Specifying a key will 
           },
           "children": [
             {
-              "_:component": "material:text",
+              "_:component": "layout:text",
               "id": "index",
               "properties": {
                 "text": "@{index}"
               }
             },
             {
-              "_:component": "material:text",
+              "_:component": "layout:text",
               "id": "name",
               "properties": {
                 "text": "@{item.name}"
               }
             },
             {
-              "_:component": "material:text",
+              "_:component": "layout:text",
               "id": "age",
               "properties": {
                 "text": "@{item.age}"
@@ -107,7 +103,7 @@ The code above, will render the following UI tree:
   },
   "children": [
     {
-      "_:component": "material:text",
+      "_:component": "layout:text",
       "properties": {
         "text": "Here's all the people in the database:"
       }
@@ -116,63 +112,63 @@ The code above, will render the following UI tree:
       "_:component": "layout:column",
       "children": [
         {
-          "_:component": "material:text",
+          "_:component": "layout:text",
           "id": "index:u003",
           "properties": {
             "text": "0"
           }
         },
         {
-          "_:component": "material:text",
+          "_:component": "layout:text",
           "id": "name:u003",
           "properties": {
             "text": "John"
           }
         },
         {
-          "_:component": "material:text",
+          "_:component": "layout:text",
           "id": "age:u003",
           "properties": {
             "text": "30"
           }
         },
         {
-          "_:component": "material:text",
+          "_:component": "layout:text",
           "id": "index:u009",
           "properties": {
             "text": "1"
           }
         },
         {
-          "_:component": "material:text",
+          "_:component": "layout:text",
           "id": "name:u009",
           "properties": {
             "text": "Mary"
           }
         },
         {
-          "_:component": "material:text",
+          "_:component": "layout:text",
           "id": "age:u009",
           "properties": {
             "text": "22"
           }
         },
         {
-          "_:component": "material:text",
+          "_:component": "layout:text",
           "id": "index:u055",
           "properties": {
             "text": "2"
           }
         },
         {
-          "_:component": "material:text",
+          "_:component": "layout:text",
           "id": "name:u055",
           "properties": {
             "text": "Anthony"
           }
         },
         {
-          "_:component": "material:text",
+          "_:component": "layout:text",
           "id": "age:u055",
           "properties": {
             "text": "5"

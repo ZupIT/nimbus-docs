@@ -18,17 +18,16 @@ fun MyButton(text: String, enabled: Boolean = true, onPress: () -> Unit) {
 }
 ```
 
-### 2. Register the component to Nimbus
+### 2.1 Register the component to Nimbus (manual deserialization)
 Tell Nimbus the component exists, its name, and how to deserialize a Nimbus UI node (`ServerDrivenNode`) into the component.
 
-We must use the components map to do it, i.e. the map we provide to the parameter `components` when creating an instance of Nimbus.
-
 ```kotlin
-val customComponents: Map<String, @Composable ComponentHandler> = mapOf(
-    "myApp:button" to @Composable { element, _ , _ ->
+val myAppUI = NimbusComposeUILibrary("myApp")
+    .addComponent("button") @Composable {
+        val onPress = element.properties?["onPress"]
         MyButton(
-            text = element.properties?.get("text") as String,
-            onPress = { (element.properties?["onPress"] as (Any?) -> Unit)(null) },
+            text = it.node.properties?.get("text") as String,
+            onPress = { if (onPress is ServerDrivenEvent) onPress.run() },
             enabled = element.properties?["enabled"] as Boolean ?: true,
         )
     },
@@ -38,34 +37,56 @@ val customComponents: Map<String, @Composable ComponentHandler> = mapOf(
 Whenever the component "myApp:button" is used by a server driven view, the composable function above will be called with the `ServerDrivenNode`
 representing it (element). 
 
-In the example, we casted `onPress` to `(Any?) -> Unit`. This is because every property function that comes from Nimbus has this signature. We then
-execute it passing `null`. This is so we can provide [implicit state](state.md#implicit-states) values to Nimbus. Most components won't need this and
-they will pass `null`, just like `myApp:button`. But some components will need this feature: text inputs, for instance, must pass its current value to
-the `onChange` function.
+Whenever a property represents an event, it will be an instance of ServerDrivenEvent, which can be run through the function `run()`. Another way
+to run an event is through `run(Any)`, which can be used for events that create a state, like an `onChange` inside a text input.
 
-In most cases, we'll only use the first argument of a `ComponentHandler`, i.e. the node itself (`ServerDrivenNode`). A node represents a component and
-it contains the following properties:
+A component builder accepts a single argument which is of type `ComponentData`. A `ComponentData` contains:
 
-- `id`: the unique id for this component;
-- `component`: the name of this component. In this example, it will always be "myApp:button";
-- `properties`: the map of properties for this component;
-- `children`: a collection of `ServerDrivenNode` representing the children of this component.
+- `children`: a composable function to render the children of this component.
+- `node`: the current component.
+  - `id`: the unique id for this component;
+  - `component`: the name of this component. In this example, it will always be "myApp:button";
+  - `properties`: the map of properties for this component;
+  - `children`: a collection of `ServerDrivenNode` representing the children of this component.
 
-The other two variables received by a `ComponentHandler` are:
+### 2.2 Register the component to Nimbus (automatic deserialization)
+It is a pain to manually deserialize every component. Furthermore, the code in the previously example is not safe, what if the backend didn't pass
+the data with the expected type? All possible errors should have treated.
 
-- children: `@Composable () -> Unit`. The children (composable) for this component. If there are no children, it renders nothing. Components that
-don't accept children, like buttons, should not care about this.
-- parentElement: `ServerDrivenNode?`. The parent `ServerDrivenNode`. `null` if this is the root node. In most cases, this is not needed.
+Fortunately, we have a code generator that creates the entirely deserialization process for your component. It suffices to add the annotation
+`@ServerDrivenComponent` to your composable. See the example below:
 
-> The component deserialization is something we're not happy with. Expect changes before a stable release.
+```kotlin
+@ServerDrivenComponent
+@Composable
+fun MyButton(text: String, enabled: Boolean?, onPress: () -> Unit) {
+    Button(enabled = enabled ?: true, content = { Text(text) }, onClick = { onPress() })
+}
+```
+
+The only difference is that now, you can't use default values for the function parameters, since this is not supported by annotation processors.
+
+When registering the component, just call `YourComponent(it)`:
+
+```kotlin
+val myAppUI = NimbusComposeUILibrary("myApp")
+    .addComponent("button") @Composable { MyButton(it) },
+)
+```
+
+Be aware that, since `MyButton(ComponentData)` is generated, you'll need to build your project before being able to use it without warnings from
+the IDE.
+
+To know more about the auto deserialization check [this article](auto-deserialization.md).
+
 
 ### 3. Certify your component map is provided in the configuration
 ```kotlin
 private val nimbus = Nimbus(
-        baseUrl = BASE_URL,
-        components = customComponents + layoutComponents,
-    )
+    baseUrl = BASE_URL,
+    components = customComponents + layoutComponents,
+)
 ```
 
 ## Read next
-:point_right: [State](state.md)
+:point_right: [Auto component deserialization](auto-deserialization.md)

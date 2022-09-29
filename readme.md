@@ -1,5 +1,36 @@
 # Disclaimer
-This is a work in progress. Just like every Nimbus library, the documentation is in beta stage. Feel free to contribute!
+This is a work in progress. Just like every Nimbus library, the documentation is in alpha stage. Feel free to contribute!
+
+# Critical issues
+## Components
+- Components must be manually deserialized on iOS for now.
+- Components can be automatically deserialized on Android most of the times, but not always. For more details check: todo.
+## Custom actions
+- Actions are currently untyped on both iOS and Android. Right now, a custom action handler receives a map of unknown type as the action properties 
+which must manually casted to the desired type.
+## Custom operations
+- Operations are currently untyped on both iOS and Android. Right now, a custom operation receives a list of unknown type as its only argument. The
+list represents the arguments passed to the operation in the backend and must be manually casted to the desired type.
+## Navigation
+- The navigation on Android is currently very buggy and causing random crashes.
+- Navigation parameters are not yet implemented.
+## Layout (additional library)
+- We don't have yet a way of using percentage values, since this is not native to SwiftUI or Compose.
+
+# Main differences to Beagle
+- Nimbus only purpose is Server Driven UI. Additional features like components, caching, analytics or a more complex navigation system must be
+provided by additional libraries or implemented by the developer. Nimbus tries to be as flexible as possible by providing extension points, but will
+not implement features outside of the scope of managing Server Driven UI. Having said that, we will provide a separate library to manage layout in
+SwiftUI and Compose. In the future, we also intend to provide a separate library with design system components.
+- There are no stack navigations. Nimbus navigation intersects with Beagle's only at: `push`, `pop` and `popTo`. Furthermore it adds `present` and
+`dismiss`, which are modal views.
+- There are no ListViews. Instead, Nimbus has the core component `forEach`, which just iterates over a list and generate the UI based on a template.
+The ListView behavior, if desired, must be implemented by a custom component. In most cases, however, the combination of `lazyColum/lazyRow` and
+`forEach` will be enough for a great UI.
+- Beagle Contexts are called States. 
+- Frontend applications are unaware of expressions. Everything is handled by Nimbus, Compose and SwiftUI. The developer's only worry is to implement
+the SwiftUI View or Composable function, without any coupling with Nimbus. e.g. if something in Beagle expected an expression of String, in Nimbus, it
+just expects a String.
 
 # Introduction
 The Nimbus SDUI is:
@@ -12,7 +43,7 @@ An application that uses Nimbus will have:
 1. A backend that provides the JSON describing the UI.
 1. A frontend application that will interpret the JSON sent by the backend and show the UI.
 
-Nimbus libraries that are currently being implemented and are in beta stages:
+Nimbus libraries that are currently being implemented and are in alpha stages:
 - Backend
   - [Nimbus for Node (Typescript)](https://github.com/ZupIT/nimbus-backend-ts)
 - Frontend
@@ -20,11 +51,11 @@ Nimbus libraries that are currently being implemented and are in beta stages:
   - [Nimbus for SwiftUI, iOS (Swift)](https://github.com/ZupIT/nimbus-swiftui)
   - [Nimbus core (shared code between all frontend implementations - Kotlin)](https://github.com/ZupIT/nimbus-core)
 - Components
-  - [Layout components for Nimbus Backend TS](https://github.com/ZupIT/nimbus-backend-ts/tree/feat/nimbus-back-ts/components)
+  - [Layout components for Nimbus Backend TS](https://github.com/ZupIT/nimbus-backend-ts/tree/main/layout)
   - [Layout components for Nimbus Compose](https://github.com/ZupIT/nimbus-layout-compose)
   - [Layout components for Nimbus SwiftUI](https://github.com/ZupIT/nimbus-layout-swiftui)
 
-Planned implementations of Nimbus:
+Planned implementations of Nimbus (after the first stable release):
 - Backend
   - Nimbus for Kotlin backends
 
@@ -45,20 +76,16 @@ when a breaking change happens (hopefully very rarely). `b` will be changed when
 `flag` can be either "alpha", "beta" or "rc" and `d` will be an incremental integer to identify the pre-release build.
 
 ## Current development stage
-We just released our first beta, which includes most of the features we intend to deliver in the final versions, but not necessarily in their best
-possible shape. In the next months we are going to iterate over what we built so far and enhance the developer experience.
+We're currently in alpha and we expect to release the first public beta in December/2022. This is only for the frontend libs. The backend will
+probably see its first beta in the beginning of 2023.
 
-What to expect for the next betas:
-- A better way for registering components. In the current version, every component must be manually deserialized from a map of properties. Our main
-goal for the next beta is to find a way to automatically do this or at least make it much easier.
-- Navigation: we currently only support navigating from a server driven screen to another server driven screen. We need to develop a system to allow
-for a better integration between native screens and server driven screens.
+What to expect for the first beta:
+- Auto deserialization for components in iOS so the developer can just link its SwiftUI Views to Nimbus instead of having to write deserializers.
+- Better auto deserialization for components in Android.
+- A more intuitive way for creating custom actions and custom operations without having to manually deserialize the property map.
+- Navigation: bug fixes in Android and Navigation Parameters.
 - Grids in the layout lib for Nimbus SwiftUI.
-- A small lib of design system components to showcase what Nimbus is capable of: button, text-input, toggle, etc.
 - Hot reloading between the backend lib and the frontend libs.
-- A web version of the documentation.
-- Better test coverage.
-- Fixes to whatever bug we find in the way.
 
 ## Getting started
 - [Getting started with Nimbus for Node (Backend)](backend-ts/getting-started.md)

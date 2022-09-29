@@ -23,7 +23,6 @@ to navigate between the documentation topics. Have fun =D!
   - [log](default-actions/log.md)
   - [openUrl](default-actions/open-url.md)
   - [sendRequest](default-actions/send-request.md)
-  - [setContent](default-actions/set-content.md)
   - [setState](default-actions/set-state.md)
 - [Expressions](expression.md)
 

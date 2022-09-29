@@ -18,23 +18,31 @@ func trim(_ string: String?) -> String? {
 ```
 
 ### 2. Register the operation
-You must create the structure that maps the operation name to its implementation. This is the map we pass in the `operations` function when configuring the `Nimbus` entrypoint. See the example below:
+You must register the action to a UI Library.
 
 ```swift
-let operations: [String: NimbusSwiftUI.Operation] = [
-  "trim": { trim($0.get(index: 0) as? String) }
-]
+let myAppUI = NimbusSwiftUILibrary("myApp")
+  .addOperation("trim") { trim($0.get(index: 0) as? String) }
 ```
+
+> Attention: right now we have to deal with untyped data and manually deserialize the list of parameters for an operation. We intend to improve this
+experience before a stable release.
 
 Whenever the operation "trim" is used by a server driven view, the function `trim` will be called with its first parameter. 
 
-### 3. Certify your operation map is configured in Nimbus entrypoint
+### 3. Certify your UI Library is registered to your Nimbus instance
 ```swift
-Nimbus(baseUrl: "base") {
-  // Your navigator here
+import SwiftUI
+import NimbusSwiftUI
+
+struct ContentView: View {
+  var body: some View {
+    Nimbus(baseUrl: "my-base-url") {
+      // Your navigator here
+    }
+    .ui([layout, myAppUI])
+  }
 }
-// another configurations as .components(components) here
-.operations(operations)
 ```
 
 # Read next

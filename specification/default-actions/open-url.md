@@ -1,4 +1,6 @@
 # openUrl
+> Not implemented on Android yet.
+
 This action opens a URL. The URL is delegated to operating system so it can open it with the user's preferred app. For instance, a URL for a website
 must be opened by the default browser, while a URL with a custom scheme must be opened by an app that can handle it.
 
