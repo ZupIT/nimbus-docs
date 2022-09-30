@@ -18,7 +18,7 @@ fun MyButton(text: String, enabled: Boolean = true, onPress: () -> Unit) {
 }
 ```
 
-### 2.1 Register the component to Nimbus (manual deserialization)
+### 2.1 Register the component to a UI Library (manual deserialization)
 Tell Nimbus the component exists, its name, and how to deserialize a Nimbus UI node (`ServerDrivenNode`) into the component.
 
 ```kotlin
@@ -49,7 +49,7 @@ A component builder accepts a single argument which is of type `ComponentData`. 
   - `properties`: the map of properties for this component;
   - `children`: a collection of `ServerDrivenNode` representing the children of this component.
 
-### 2.2 Register the component to Nimbus (automatic deserialization)
+### 2.2 Register the component to a UI Library (automatic deserialization)
 It is a pain to manually deserialize every component. Furthermore, the code in the previously example is not safe, what if the backend didn't pass
 the data with the expected type? All possible errors should have treated.
 
@@ -80,11 +80,11 @@ the IDE.
 To know more about the auto deserialization check [this article](auto-deserialization.md).
 
 
-### 3. Certify your component map is provided in the configuration
+### 3. Certify your UI Library is provided in the configuration
 ```kotlin
 private val nimbus = Nimbus(
     baseUrl = BASE_URL,
-    components = customComponents + layoutComponents,
+    ui = listOf(layoutUI, myAppUI),
 )
 ```
 

@@ -28,7 +28,7 @@ retrieved via the `parent` pointer.
 - `dependencies`: tell the Nimbus lifecycle which dependencies may have changed so it can propagate updates through its dependency graph. You'll
 probably never need to use this, but it's used by the core action `setState` to update the UI after a state changes its value.
 
-For most action handlers, we'll only need `event.action.properties`.
+Most action handlers will only need `action.properties`.
 
 ### 2. Register the action handler
 The same structure used for registering components and actions is used for registering operations: NimbusComposeUILibrary. See the example below:
@@ -53,7 +53,7 @@ Attention: we intend to create a more intuitive and type-safe way for writing ac
 ```kotlin
 private val nimbus = Nimbus(
     // ...
-    ui = listOf(myAppUI),
+    ui = listOf(layoutUI, myAppUI),
 )
 ```
 

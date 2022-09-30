@@ -24,7 +24,7 @@ stable release.
 
 We get the property "message" from the event, cast to expected type `String` and print it to the console if message is not nil.
 
-`Action` is a typealias for `(ActionTriggeredEvent) -> void?`. An `ActionEvent` has the following properties:
+`Action` is a typealias for `(ActionTriggeredEvent) -> Void`. An `ActionTriggeredEvent` has the following properties:
 
 - `action`: the action triggered by the event. Use this object to find the name of the action, its properties and metadata. This will be the only
 information you'll need for almost every action handler you'll write.
@@ -33,6 +33,8 @@ entire scope hierarchy. Example of scope hierarchy: this event > parent event > 
 retrieved via the `parent` pointer.
 - `dependencies`: tell the Nimbus lifecycle which dependencies may have changed so it can propagate updates through its dependency graph. You'll
 probably never need to use this, but it's used by the core action `setState` to update the UI after a state changes its value.
+
+Most action handlers will only need `action.properties`.
 
 ### 2. Register the action handler
 You must register the action to a UI Library.

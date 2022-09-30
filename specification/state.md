@@ -77,7 +77,7 @@ input. See a solution below:
   },
   "children": [
     {
-      "_:component": "layout:textInput",
+      "_:component": "material:textInput",
       "properties": {
         "placeholder": "Type the text here",
         "value": "@{text}",

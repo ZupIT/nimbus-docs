@@ -35,7 +35,7 @@ Attention: we intend to create a more intuitive and type-safe way for writing op
 ```kotlin
 private val nimbus = Nimbus(
     // ...
-    ui = listOf(myAppUI),
+    ui = listOf(layoutUI, myAppUI),
 )
 ```
 

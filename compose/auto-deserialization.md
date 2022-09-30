@@ -19,7 +19,7 @@ This feature is highly experimental and will probably see significant changes be
 
 ### For function arguments
 - `@Root`: forces the value to be built using the entries at the root of the property map and not the sub-map indicated by the parameter name.
-- `@Ignore`: ignore the argument when deserializing. This can only be used in optional arguments.
+- `@Ignore`: ignores the argument when deserializing. This can only be used in optional arguments.
 - `@Computed(TypeDeserializer)`: uses a custom deserializer to build the argument.
 
 ## Custom deserializers (TypeDeserializer)
@@ -29,7 +29,6 @@ Sometimes you don't want to code a deserializer for the entire Composable functi
 
 ```kotlin
 object AdaptiveSizeDeserializer: TypeDeserializer<AdaptiveSize?> {
-    @Suppress("ReturnCount")
     override fun deserialize(
         properties: ComponentDeserializer,
         data: ComponentData,
@@ -46,7 +45,7 @@ object AdaptiveSizeDeserializer: TypeDeserializer<AdaptiveSize?> {
 
 Attention: the deserializer must always be an object.
 
-2. Annotate the argument inside the Composable function. See the example below for the width of a Row:
+2. Annotate the argument inside the Composable function. See the example below for the width and height of a Row:
 
 ```
 @ServerDrivenComponent

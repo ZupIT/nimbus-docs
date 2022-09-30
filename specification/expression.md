@@ -11,7 +11,7 @@ Hardcoded: the text won't change.
   "_:component": "layout:column",
   "children": [
     {
-      "_:component": "layout:textInput",
+      "_:component": "material:textInput",
       "properties": {
         "placeholder": "Type the text here",
         "value": "Hardcoded value"
@@ -37,7 +37,7 @@ Dynamic: the text changes according to the input:
   },
   "children": [
     {
-      "_:component": "layout:textInput",
+      "_:component": "material:textInput",
       "properties": {
         "placeholder": "Type the text here",
         "value": "@{text}",

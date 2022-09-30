@@ -4,10 +4,11 @@ This is a work in progress. Just like every Nimbus library, the documentation is
 # Critical issues
 ## Components
 - Components must be manually deserialized on iOS for now.
-- Components can be automatically deserialized on Android most of the times, but not always. For more details check: todo.
+- Components can be automatically deserialized on Android most of the times, but not always. For more details check: [Auto component deserialization
+on compose](compose/auto-deserialization.md).
 ## Custom actions
 - Actions are currently untyped on both iOS and Android. Right now, a custom action handler receives a map of unknown type as the action properties 
-which must manually casted to the desired type.
+which must be manually casted to the desired type.
 ## Custom operations
 - Operations are currently untyped on both iOS and Android. Right now, a custom operation receives a list of unknown type as its only argument. The
 list represents the arguments passed to the operation in the backend and must be manually casted to the desired type.
@@ -84,7 +85,6 @@ What to expect for the first beta:
 - Better auto deserialization for components in Android.
 - A more intuitive way for creating custom actions and custom operations without having to manually deserialize the property map.
 - Navigation: bug fixes in Android and Navigation Parameters.
-- Grids in the layout lib for Nimbus SwiftUI.
 - Hot reloading between the backend lib and the frontend libs.
 
 ## Getting started
