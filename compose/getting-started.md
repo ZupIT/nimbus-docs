@@ -18,15 +18,22 @@ allprojects {
 }
 ```
 
-``` 
-dependencies {
-  // Nimbus compose base library
-  implementation "br.com.zup.nimbus:nimbus-compose:${nimbusComposeVersion}". 
-  // Recommended if you don't want to implement the layout components yourself
-  implementation "br.com.zup.nimbus:nimbus-layout-compose:${nimbusComposeLayoutVersion}"
-  // Support for auto-deserialization
-  ksp("br.com.zup.nimbus:nimbus-compose-processor:${nimbusComposeVersion}")
+```
+plugins {
+    // ...
+    // Support for auto-deserialization. Use the latest version of ksp according to your Kotlin version.
+    id("com.google.devtools.ksp") version "1.6.10-1.0.4"
 }
+
+dependencies {
+    // ...
+    // Nimbus compose base library
+    implementation "br.com.zup.nimbus:nimbus-compose:${nimbusComposeVersion}". 
+    // Recommended if you don't want to implement the layout components yourself
+    implementation "br.com.zup.nimbus:nimbus-layout-compose:${nimbusComposeLayoutVersion}"
+    // Support for auto-deserialization
+    ksp("br.com.zup.nimbus:nimbus-compose-processor:${nimbusComposeVersion}")
+  }
 
 // Support for auto-deserialization
 kotlin {
@@ -39,6 +46,7 @@ kotlin {
     sourceSets.test {}
 }
 ```
+
 Above, we added both the core Nimbus library and a component library for layout components. Our examples will use both, but if your project won't use
 the layout components, you don't need to the second dependency.
 

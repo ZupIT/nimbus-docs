@@ -99,3 +99,12 @@ What to expect for the first beta:
 - [Nimbus SwiftUI](swiftui/index.md)
 - [Nimbus Core (shared code between the frontend libs)](core/index.md)
 - [Layout components](layout/index.md)
+
+## Samples
+Nimbus has a sample application implemented for the backend, SwiftUI and Compose. This sample is not yet finished, but can be a great example of
+how to use the tool.
+
+- [Description of the intended full sample](https://github.com/ZupIT/beagle-backend-ts/wiki/Sample)
+- [Implementation on the backend](https://github.com/ZupIT/nimbus-backend-ts/tree/main/sample)
+- [Implementation on iOS (SwiftUI)](https://github.com/ZupIT/nimbus-layout-swiftui/tree/main/Store)
+- [Implementation on Android (Compose)](https://github.com/ZupIT/nimbus-layout-compose/tree/main/store)
