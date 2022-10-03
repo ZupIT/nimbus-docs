@@ -1,5 +1,3 @@
-> Article level: basic.
-
 # Components
 Components are the main structure in Nimbus. Nimbus use a tree to represent the UI and the components are the node of this tree.
 
@@ -70,7 +68,8 @@ The JSON above renders a column with two texts: "Hello" in the first line and "W
 The Nimbus specification declares 2 structural components, i.e. any implementation must have them. The components shipped with Nimbus are:
 
 - [if, then, else](default-components/if.md);
-- [forEach](default-components/for-each.md).
+- [forEach](default-components/for-each.md);
+- fragment: a very simple component that uses the vertical axis to display its children in sequence.
 
 # Custom components
 Just like [operations](operation.md) and [actions](actions.md), Nimbus must provide a way for the developer to register new components. Nimbus ships

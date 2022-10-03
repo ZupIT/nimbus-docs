@@ -18,13 +18,39 @@ allprojects {
 }
 ```
 
-``` 
-  // Nimbus compose base library
-  implementation "br.com.zup.nimbus:nimbus-compose:${nimbusComposeVersion}". 
-  // Recommended if you don't want to implement the layout components yourself
-  implementation "br.com.zup.nimbus:nimbus-layout-compose:${nimbusComposeLayoutVersion}" 
 ```
-Above, we added both the core Nimbus library and a component library for layout components. Our examples will use both, but if your project won't use the layout components, you don't need to the second dependency.
+plugins {
+    // ...
+    // Support for auto-deserialization. Use the latest version of ksp according to your Kotlin version.
+    id("com.google.devtools.ksp") version "1.6.10-1.0.4"
+}
+
+dependencies {
+    // ...
+    // Nimbus compose base library
+    implementation "br.com.zup.nimbus:nimbus-compose:${nimbusComposeVersion}". 
+    // Recommended if you don't want to implement the layout components yourself
+    implementation "br.com.zup.nimbus:nimbus-layout-compose:${nimbusComposeLayoutVersion}"
+    // Support for auto-deserialization
+    ksp("br.com.zup.nimbus:nimbus-compose-processor:${nimbusComposeVersion}")
+  }
+
+// Support for auto-deserialization
+kotlin {
+    sourceSets.debug {
+        kotlin.srcDir("build/generated/ksp/debug/kotlin")
+    }
+    sourceSets.release {
+        kotlin.srcDir("build/generated/ksp/release/kotlin")
+    }
+    sourceSets.test {}
+}
+```
+
+Above, we added both the core Nimbus library and a component library for layout components. Our examples will use both, but if your project won't use
+the layout components, you don't need to the second dependency.
+
+We also added the processor for generating code for the auto-deserialization of components.
 
 ## 2. Adding permissions
 Just like any other Android application that makes network requests. To use Nimbus, you must add Internet permissions to your manifest. For more details
@@ -34,17 +60,19 @@ on this, please check [the official Android documentation](https://developer.and
 To start, we must create an instance of the server driven tool and pass our configuration.
 
 ```kotlin
-const val BASE_URL = "https://gist.githubusercontent.com/hernandazevedozup/eba4f2eb6afd6d6769a549fe037c1613/raw/cd3a897f4384783a1e799bb118a0dbfa8838fcf0"
+const val BASE_URL = "https://gist.githubusercontent.com/Tiagoperes/da38171c94be043c3e5b81cbb835a0e5/raw/ab832ba276764f4de12552f02c4f56e20cd83b0b"
 
 class MainActivity : ComponentActivity() {
     private val nimbus = Nimbus(
         baseUrl = BASE_URL,
-        components = layoutComponents,
+        ui = listOf(layoutUI),
+        mode = if (BuildConfig.DEBUG) NimbusMode.Development else NimbusMode.Release,
     )
 }
 ```
 
-Above, `baseUrl` is the url to our backend server and `components` is the map with all components that can be rendered for a Server Driven View.
+Above, `baseUrl` is the url to our backend server and `ui` is a list of `ComposeUILibrary` with all components, actions and operations that can be
+rendered for a Server Driven View.
 Nimbus has a lot of customizations and they're mostly done via the constructor for `Nimbus`. To check every possible configuration, please check the
 [dedicate topic](configuration.md).
 
@@ -86,18 +114,18 @@ To render a server driven view, we need a Nimbus Navigator. This is because, a s
 like "go to another server driven view" or "go back to the previous server driven view".
 
 A Nimbus Navigator is a container for every server driven view that is loaded in its context. To start up a Nimbus Navigator, we need to tell which
-server driven view is the first of its navigation stack. This is done via the single argument it accepts: a `ViewRequest`.
+server driven view is the first of its navigation stack. This is done via the single argument it accepts: a `ViewRequest` or a JSON string.
 
-The example below shows the full code for rendering a server driven view hosted in Github. This will load `GET $baseUrl/1`, i.e.
-`GET https://gist.githubusercontent.com/hernandazevedozup/eba4f2eb6afd6d6769a549fe037c1613/raw/cd3a897f4384783a1e799bb118a0dbfa8838fcf0/1`.
+The example below shows the full code for rendering a server driven view hosted in Github. This will load `GET $baseUrl/hello-world.json`, i.e.
+`GET https://gist.githubusercontent.com/Tiagoperes/da38171c94be043c3e5b81cbb835a0e5/raw/ab832ba276764f4de12552f02c4f56e20cd83b0b/hello-world.json`.
 
 ```kotlin
-const val BASE_URL = "https://gist.githubusercontent.com/hernandazevedozup/eba4f2eb6afd6d6769a549fe037c1613/raw/cd3a897f4384783a1e799bb118a0dbfa8838fcf0"
+const val BASE_URL = "https://gist.githubusercontent.com/Tiagoperes/da38171c94be043c3e5b81cbb835a0e5/raw/ab832ba276764f4de12552f02c4f56e20cd83b0b"
 
 class MainActivity : ComponentActivity() {
     private val nimbus = Nimbus(
         baseUrl = BASE_URL,
-        components = layoutComponents,
+        ui = listOf(layoutUI),
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -106,7 +134,7 @@ class MainActivity : ComponentActivity() {
             AppTheme {
                 Surface(color = MaterialTheme.colors.background) {
                     ProvideNimbus(nimbus) {
-                        NimbusNavigator(ViewRequest("/1"))
+                        NimbusNavigator(ViewRequest("/hello-world.json"))
                     }
                 }
             }
@@ -116,9 +144,7 @@ class MainActivity : ComponentActivity() {
 ```
 
 ## 6. Running
-After running the application, you should see the following interface in the emulator's screen:
-
-<img src="https://github.com/ZupIT/nimbus-layout-compose/blob/main/layout/screenshots/debug/br.com.zup.nimbus.compose.layout.LayoutFlexTest_test_layout_1.png" width="228"/>
+After running the application, you should see a "Hello World" text in the emulator.
 
 ## Read next
 :point_right: [Component](component.md)

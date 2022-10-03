@@ -5,10 +5,11 @@ To check the definition of a State in Nimbus and its purposes, please check the 
 Nimbus compose takes care of the local states for you. You don't need to worry about it! The lib processes the json and calculates the state values
 before sending data to the UI layer that renders the components.
 
-# Implicit states
+# Event states
 It's very simple to create Components with events that use implicit states. See the example below for a component that renders a text input.
 
 ```kotlin
+@ServerDrivenComponent
 @Composable
 fun NimbusTextField(text: String, onChange: (String) -> Unit) {
     TextField(value = text, onValueChange = {
@@ -17,35 +18,45 @@ fun NimbusTextField(text: String, onChange: (String) -> Unit) {
 }
 ```
 
-Notice that the component doesn't become coupled to Nimbus. This is exactly what you would do for any Component in Compose. The `onChange` function
-will be provided by Nimbus and only need to be correctly deserialized in the component map.
+Notice that the component doesn't become coupled to Nimbus. This is exactly what you would do for any Component in Compose.
 
-```kotlin
-val customComponents: Map<String, @Composable ComponentHandler> = mapOf(
-    "material:textField" to @Composable { element, _ , _ ->
-        NimbusTextField(
-            text = element.properties?.get("text") as String,
-            onChange = { (element.properties!!["onChange"] as (Any?) -> Unit)(it) },
-        )
-    }
+Events always create states of their own named just like themselves. The `onChange` event above will expose a state called `onChange` for everything
+in its scope.
+
+The string passed to the `onChange` function will update the current value of the event state, making it available for anything that might need it,
+like a `setState` action.
+
+## Global State
+The Global state will probably be removed in the next builds. Consider Application Managed States instead.
+
+## Application Managed States
+You can have application managed states that are shared with your server driven views.
+
+Let's say you need a state to store all products in the shopping cart, this state must be the same throughout the entire application and it must
+be accessed from both native views and Server Driven Views.
+
+1. Create the state:
+```kt
+val cartState = ServerDrivenState("cart", emptyList())
+```
+
+2. Provide it to the nimbus instance:
+```kt
+val nimbus = Nimbus(
+    // ...
+    states = listOf(cartState)
 )
 ```
 
-## Global State
-To access the Global State in Nimbus Compose you must use your nimbus instance:
+Now, the cart is accessible from within any Server Driven View of `nimbus` through the state id "cart". The current state value can be read by
+calling `cartState.get()`.
 
-```kotlin
-val nimbus = Nimbus(baseUrl = "https://my-backend.com")
-val globalState = nimbus.globalState
-```
+Important (1): state values must be primitive types, maps of primitive types or lists of primitive types, i.e. deserializable. We do intend to make this
+better before releasing a stable version.
 
-With a reference to the Global state, you can:
-- read it: `globalState.getValueCopy()`. Gets a copy of the current state value.
-- write to it: `globalState.set(newValue, path)`. Sets the current state value at the specified path. If no path is provided, the entire state is
-replaced by `newValue`. To set user's name, for instance: `globalState.set("John", "user.name")`. If a path doesn't exist in the global context, it's
-created.
-- listen to changes: `onChange(listener)`. Subscribes to changes in the global state. `listener` must be a function that receives nothing and returns
-nothing. The `onChange` function returns another function that, when called, removes the listener from the state.
+Important (2): states don't implement the observable pattern, but, if you need, you can still observe it by attaching your logic to the Nimbus
+Dependency Graph. We'll make this process far easier in the future, but for now, we recommend contacting a developer of this lib for further
+information.
 
 ## Read next
 :point_right: [Operations](operation.md)

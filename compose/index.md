@@ -7,6 +7,7 @@ topics.
 ## Topics
 - [Getting started](getting-started.md)
 - [Components](component.md)
+- [Auto component deserialization](auto-deserialization.md)
 - [State](state.md)
 - [Operations](operation.md)
 - [Actions](action.md)

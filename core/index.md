@@ -7,33 +7,31 @@ This document lists the features that are common to both Nimbus Compose and Nimb
 
 All examples here will be given in Kotlin because this is the language Nimbus Core has been implemented with.
 
-## Action observers
+## Action observers (registered via the parameter `ui`)
 An observer that is triggered whenever an Action runs. It works similarly to the map of Actions itself, but instead of running for a specific Action,
 this will run for every action.
 
-An action observer is a function that receives an `ActionEvent` and returns nothing. An `ActionEvent` is defined as follows:
+An action observer is a function that receives an `ActionTriggeredEvent` and returns nothing. An `ActionTriggeredEvent` is defined as follows:
 
 ```kotlin
-data class ActionEvent(
+class ActionTriggeredEvent(
   /**
    * The action of this event. Use this object to find the name of the action, its properties and metadata.
    */
   val action: ServerDrivenAction,
   /**
-   * The name of the event that triggers the action, i.e. the key of the node property that declared it. Example, a
-   * component "Button" triggers the action found in the property "onPress" when it's pressed. "onPress" is the
-   * "name" of this event.
+   * The scope of the event that triggered this ActionEvent.
    */
-  val name: String,
+  val scope: ServerDrivenEvent,
   /**
-   * The node (component) containing the action.
+   * Every event can update the current state of the application based on the dependency graph. This set starts empty
+   * when a ServerDrivenEvent is run. A ServerDrivenEvent is what triggers ActionEvents. Use this to tell the
+   * ServerDrivenEvent (parent) which dependencies might need to propagate its changes to its dependents after it
+   * finishes running. "Might" because it will still check if the dependency has really changed since the last time its
+   * dependents were updated.
    */
-  val node: RenderNode,
-  /**
-   * The view containing the node that declared the action.
-   */
-  val view: ServerDrivenView,
-)
+  val dependencies: MutableSet<CommonDependency>,
+): ActionEvent
 ```
 
 A simple use for this feature would be to log every action that is executed and has `log = true` in its metadata.

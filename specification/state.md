@@ -1,5 +1,3 @@
-> Article level: intermediary.
-
 # State
 Nimbus doesn't have an embedded script language, and we defend that it shouldn't have one. But we still need to make it
 possible to create dynamic UIs from the backend. To solve this issue, Nimbus introduces three concepts: State,

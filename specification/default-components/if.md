@@ -5,8 +5,6 @@ it gets rendered so only the node we want to render ends up in the screen.
 
 If the `condition` passed to the component `if` is `true`, the children of `then` are rendered. Otherwise, the children of `else` are rendered.
 
-`if` requires `then` as a child. `else` is optional and when not provided, if the condition is false, nothing gets rendered.
-
 `if` doesn't accept any child other than `then` and `else`.
 
 The content rendered by `if` must update according to the state passed to `condition`, i.e. if `condition` changes from `true` to `false` or from
@@ -47,7 +45,7 @@ The components `else` and `then` can't receive any property.
           "_:component": "then",
           "children": [
             {
-              "_:component": "material:text",
+              "_:component": "layout:text",
               "properties": {
                 "text": "Good morning!"
               }
@@ -64,7 +62,7 @@ The components `else` and `then` can't receive any property.
           "_:component": "else",
           "children": [
             {
-              "_:component": "material:text",
+              "_:component": "layout:text",
               "properties": {
                 "text": "Good evening!"
               }
@@ -96,7 +94,7 @@ screen is the following:
   },
   "children": [
     {
-      "_:component": "material:text",
+      "_:component": "layout:text",
       "properties": {
         "text": "Good morning!"
       }
@@ -122,7 +120,7 @@ screen is the following:
   },
   "children": [
     {
-      "_:component": "material:text",
+      "_:component": "layout:text",
       "properties": {
         "text": "Good evening!"
       }

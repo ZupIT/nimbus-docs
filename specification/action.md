@@ -1,5 +1,3 @@
-> Article level: basic.
-
 # Actions
 Actions are the third and final Nimbus feature that allows views to be dynamic. Just like operations, actions can be
 viewed as functions, but with an important difference: while operations always have a return value and never have

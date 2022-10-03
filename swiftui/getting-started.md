@@ -10,7 +10,7 @@ You can configure the `NimbusSwiftUI` and `NimbusLayoutSwiftUI` using Xcode pack
 ### XCode
 
 1. Select `Xcode > File > Add Packages...`
-2. Add package repository: `https://github.com/ZupIT/nimbus-layout-swiftui.git`
+2. Add package repository: `https://github.com/ZupIT/nimbus-layout-swiftui.git` (use the tag 1.0.0-alpha$LATEST), where $LATEST is the latest alpha build.
 3. Import the package in your source files: `import NimbusLayoutSwiftUI`
 
 ### Swift Package
@@ -21,7 +21,7 @@ Add `NimbusLayoutSwiftUI` package dependency to your `Package.swift` file:
 let package = Package(
   ...
   dependencies: [
-    .package(url: "https://github.com/ZupIT/nimbus-layout-swiftui.git", from: "0.1.0-beta0")
+    .package(url: "https://github.com/ZupIT/nimbus-layout-swiftui.git", from: "1.0.0-alpha1") // instead of alpha 1, use the latest alpha build.
   ],
   targets: [
     .target(name: "YourPackage",
@@ -44,7 +44,7 @@ struct ContentView: View {
     Nimbus(baseUrl: baseUrl) {
       // construct your view hierarchy containing a navigator here
     }
-    .layoutComponents()
+    .ui([layout])
   }
 }
 ```
@@ -52,9 +52,6 @@ struct ContentView: View {
 Above, `baseUrl` is the url to our backend server and `components` is the map with all components that can be rendered for a Server Driven View.
 Nimbus has a lot of customizations and they're mostly done via the modifier functions for `Nimbus`. To check every possible configuration, please check the
 [dedicate topic](configuration.md).
-
-Above, we used a gist in Github to show an example. In real applications, this would be the url to your backend server, i.e. the application that
-provides the JSON for the server driven views.
 
 ## 3. Rendering a server driven view
 To render a server driven view, we need a `NimbusNavigator`. This is because, a server driven view may not be just one view, it can have instructions
@@ -65,21 +62,21 @@ A `NimbusNavigator` is a container for every server driven view that is loaded i
 - `ViewRequest`, for request configuration
 - json `String`
 
-The example below shows the full code for rendering a server driven view hosted in Github. This will load `GET $baseUrl/1`, i.e.
-`GET https://gist.githubusercontent.com/hernandazevedozup/eba4f2eb6afd6d6769a549fe037c1613/raw/cd3a897f4384783a1e799bb118a0dbfa8838fcf0/1`.
+The example below shows the full code for rendering a server driven view hosted in Github. This will load `GET $baseUrl/hello-world.json`, i.e.
+`GET https://gist.githubusercontent.com/Tiagoperes/da38171c94be043c3e5b81cbb835a0e5/raw/ab832ba276764f4de12552f02c4f56e20cd83b0b/hello-world.json`.
 
 ```swift
 import SwiftUI
 import NimbusLayoutSwiftUI
 
-let BASE_URL = "https://gist.githubusercontent.com/hernandazevedozup/eba4f2eb6afd6d6769a549fe037c1613/raw/cd3a897f4384783a1e799bb118a0dbfa8838fcf0"
+let BASE_URL = "https://gist.githubusercontent.com/Tiagoperes/da38171c94be043c3e5b81cbb835a0e5/raw/ab832ba276764f4de12552f02c4f56e20cd83b0b"
 
 struct ContentView: View {
   var body: some View {
     Nimbus(baseUrl: baseUrl) {
-      NimbusNavigator(url: "/1")
+      NimbusNavigator(url: "/hello-world.json")
     }
-    .layoutComponents()
+    .ui([layout])
   }
 }
 ```
@@ -99,8 +96,7 @@ struct SampleApp: App {
 }
 ```
 ## 5. Running
-After running the application, you should see the following interface in the emulator's screen:
-<img src="https://github.com/ZupIT/nimbus-layout-swiftui/blob/main/screenshot/flex_test_layout1.png" width="228"/>
+After running the application, you should see a "Hello World" text in the emulator.
 
 ## Read next
-:point_right: [Component](/components)
+:point_right: [Component](/component.md)

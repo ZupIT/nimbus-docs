@@ -8,6 +8,10 @@
 1. [Full documentation for the CLI](#full-documentation-for-the-cli)
 1. [Keep reading](#keep-reading)
 
+## Disclaimer (alpha version)
+This backend is an adaptation of Beagle's own backend and has not suffered many changes yet. This lib will probably see some significant changes
+before a stable release.
+
 ## Pre-installation
 1. Make sure you have Node installed by using the command `node -v`. The minimum node version compatible with this
 lib is 13.2. If Node is not installed or is on an unsupported version, consider installing nvm in your machine. nvm is
@@ -62,6 +66,8 @@ yarn start
 The application will be running at `http://localhost:3000` if you didn't change any of the default configurations.
 This command also starts a websocket server that enables hot-reloading in frontend applications. To know more
 about this, read this [topic](cli.md#starting-up-the-server-and-hot-reloading).
+
+> Hot reloading is not currently enabled in the frontend.
 
 ## Full documentation for the CLI
 Read the topic [topic](cli.md) to know more about every command and options of the CLI.
