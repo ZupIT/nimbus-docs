@@ -16,7 +16,7 @@ where `$VERSION` is the latest version.
 See ["Part 1: Installing" of the "Getting Started" for Nimbus SwiftUI](../swiftui/getting-started.md#1-Installing).
 
 # Image Provider
-This class is used to provide local images to the component "layout:image". See the examples below of how to implement and set it up.
+This class is used to provide local images to the components "layout:localImage" and "layout:remoteImage". See the examples below of how to implement and set it up.
 
 ## Android
 The ImageProvider:
