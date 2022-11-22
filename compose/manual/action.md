@@ -52,6 +52,7 @@ for helping with type management. If you are going to use manual deserialization
 If we find any deserialization error, instead of calling the action handler, we throw an exception, which will be treated and printed as an error
 log by Nimbus.
 
+### `ActionTriggeredEvent`
 An `ActionTriggeredEvent` has the following properties:
 
 - `action`: the action triggered by the event. Use this object to find the name of the action, its properties and metadata. This will be the only

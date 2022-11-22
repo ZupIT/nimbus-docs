@@ -64,6 +64,8 @@ helping with type management. If you are going to use manual deserialization, we
 Whenever a property represents an event, it will be an instance of `ServerDrivenEvent`, which can be run through the function `run()`. Another way
 to run an event is through `run(Any)`, which can be used for events that create a state, like an `onChange` inside a text input.
 
+### `ComponentData`
+
 A component builder (last parameter of `addComponent`) accepts a single argument which is of type `ComponentData`. A `ComponentData` contains:
 
 - `children`: a composable function to render the children (content) of this component.
