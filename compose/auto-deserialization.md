@@ -1,6 +1,6 @@
 # Automatic deserialization
-As seen in the documentation for [components](component.md), the annotation `@ServerDrivenComponent` can be used for creating deserializable versions
-of composable functions.
+As seen in the documentation for [components](component.md), [actions](action.md) and [operations](operation.md), the annotation `@AutoDeserialize`
+can be used for creating deserializable versions of composable functions, actions handlers and operations.
 
 As of alpha, we currently support as parameters of an auto-deserializable composable function:
 - Primitive types
