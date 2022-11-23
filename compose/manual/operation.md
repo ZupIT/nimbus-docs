@@ -1,10 +1,8 @@
 # Operations
-Check the [specification](/specification/operation.md) to know more about the definition of Nimbus Operations.
-
 This topic will show how to manually deserialize an operation. If you want to learn the automatic and recommended approach (code generation), please
 read the topic ["Operation"](../operation.md) instead.
 
-We'll use the same component implemented [here](../operation.md#creating-your-own-operations).
+We'll use the same operation implemented [here](../operation.md#creating-your-own-operations).
 
 You'll implement the operation just like the automatic version, but without the annotation `@AutoDeserialize`.
 

@@ -1,9 +1,9 @@
 # Automatic deserialization
 As seen in the documentation for [components](component.md), [actions](action.md) and [operations](operation.md), the annotation `@AutoDeserialize`
-can be used for creating deserialized versions of composable functions (components), actions handlers and operations.
+can be used for creating deserialized versions of composable functions (components), action handlers and operations.
 
-In order to support auto-deserialization in your project, you must make sure everything marked as "Support for auto-deserialization" in the
-[getting started manual](getting-started.md#1-installing) was added to the `build.gradle`.
+In order to support auto-deserialization in your project, you must make sure everything marked as "Support for auto-deserialization" in the topic
+["getting started"](getting-started.md#1-installing) was added to the `build.gradle`.
 
 The automatic deserialization will check every function annotated with `@AutoDeserialize` and generate code to create another function with the
 same name, at the same location that accepts `ComponentData` for components, `ActionTriggeredEvent` for action handlers and `List<Any>` for
@@ -45,17 +45,18 @@ parameter typed as:
 
 Nimbus Processor generates code that will always try to make sense of the values in the property map. For instance, if the function needs a
 String, but the value is an Int, the string representation of the number will be used. If the function needs an Int, but the value is a Double, the 
-value is converted; and so on. To know of all the type coercion that this system makes, please check the code documentation for the class
-`AnyServerDrivenData`.
+value is converted; and so on. To know all about the type coercion this system makes, please check the code documentation for the class
+[`AnyServerDrivenData`](https://github.com/ZupIT/nimbus-core/blob/main/src/commonMain/kotlin/com/zup/nimbus/core/deserialization/AnyServerDrivenData.kt).
 
 In the previous list, notice that function types are accepted. These will always be interpreted as Server Driven Events when not annotated with
-`@Composable`. Server Driven Events carry [Actions] (/specification/action.md). Events will always be properties like "onClick', "onPress", 
-"onChange", "onFocus", "onBlur", "onSuccess", "onError", etc; and they will run every action brought in the JSON when the function is called. The 
-functions that accept a parameter are events that need to declare a state value, for example, the "onChange" event of a text input declares its 
-current value to its actions.
+`@Composable`. Server Driven Events carry [Actions](/specification/action.md) and will always be properties like "onClick', "onPress", 
+"onChange", "onFocus", "onBlur", "onSuccess", "onError", etc. Once called, the function will run every action brought in the JSON.
+
+The functions that accept a parameter are events that need to declare a state value, for example, the "onChange" event of a text input declares its 
+current value in the state "onChange".
 
 Parameters that are functions annotated with `@Composable` will receive the composable function that renders the children of the component. If the
-component has no children, it will render an empty `Column`.
+component has no children, they render an empty `Column`.
 
 > Attention: the composable function type is only accepted as a parameter of a composable function (component). An error at build time will be raised
 if this type is used for an action handler or operation. The other types of functions (events), are not acceptable inside operations.
@@ -88,7 +89,7 @@ import br.com.zup.nimbus.annotation.Deserializer
 fun deserializeDate(data: AnyServerDrivenData): Date? = if (data.isNull()) null else Date(data.asLong())
 ```
 
-Now, whenever we use the type `Date` in a component, action handler or operation annotated with `@AutoDeserialize`, instead of throwing a compilation
+Now, whenever we use the type `Date?` in a component, action handler or operation annotated with `@AutoDeserialize`, instead of throwing a compilation
 error at build time, the Nimbus processor will use this custom deserializer.
 
 If the type accepts a generic argument, the deserializer must be implemented for the generic argument. See an example below:
@@ -201,33 +202,33 @@ fun Row(
 }
 ```
 
-It's great that we can specify all these optional properties at the root of the properties map of the component in the backend. But here it makes it
-much harder to reuse the code in the component `Column`. Wouldn't it be much better if we received an instance of `Style` without altering the
-components API? This is possible via the annotation `@Root`. See the example below:
+It's great that we can specify all these optional properties at the root of the properties map in the backend. But here it makes it much harder to 
+reuse the code in the component `Column`. Wouldn't it be much better if we received an instance of `Style` without altering the components API? This 
+is possible via the annotation `@Root`. See the example below:
 
 ```kt
 import br.com.zup.nimbus.annotation.AutoDeserialize
 import br.com.zup.nimbus.annotation.Root
 
 class Padding(
-    @Root val paddingTop: Double?,
-    @Root val paddingBottom: Double?,
-    @Root val paddingLeft: Double?,
-    @Root val paddingRight: Double?,
-    @Root val padding: Double?,
+    val paddingTop: Double?,
+    val paddingBottom: Double?,
+    val paddingLeft: Double?,
+    val paddingRight: Double?,
+    val padding: Double?,
 )
 
 class Margin(
-    @Root val marginTop: Double?,
-    @Root val marginBottom: Double?,
-    @Root val marginLeft: Double?,
-    @Root val marginRight: Double?,
-    @Root val margin: Double?,
+    val marginTop: Double?,
+    val marginBottom: Double?,
+    val marginLeft: Double?,
+    val marginRight: Double?,
+    val margin: Double?,
 )
 
 class Size(
-    @Root val width: Double?,
-    @Root val height: Double?,
+    val width: Double?,
+    val height: Double?,
 )
 
 class Style(
@@ -264,14 +265,14 @@ When `@Root` is used on a required type, the auto-deserialization will attempt t
 type, the auto-deserialization will only attempt to instantiate the type if at least one of its properties exist in the map, otherwise it will be
 assigned `null`.
 
-`@Root` can't be used in every scenario, here are some use cases where the use of `@Root` doesn't make sense and will throw errors at build time:
+`@Root` can't be used in every scenario, here are some cases where the use of `@Root` doesn't make sense and will throw errors at build time:
 - `@Root` can only be used on non-primitive types without an associated custom deserializer (`@Deserialize`).
 - `@Root` can't be used in operations.
 - The developer must not create cyclic references with the `@Root` annotation.
 
 ## Renaming a property
 If the backend API has a component or action property with a different name than the one you'd like to use in your code, you can inform it to the
-Nimbus Processor via the annotation "@Alias". See the example below:
+Nimbus Processor via the annotation `@Alias`. See the example below:
 
 Suppose the backend implements the action "logError" that receives the property named "error_message", but you want it to be named "message" in your
 source code.
@@ -286,21 +287,20 @@ fun logError(@Alias("error_message") message: String) {
 }
 ```
 
-Although we recommend keeping the names the same between all platforms most of the times, this can be useful in some specific situations, like legacy
-support.
+Although we recommend keeping the names the same between all platforms, this can be useful in some specific situations, like legacy support.
 
 ## The DeserializationContext
 This won't be necessary for most applications. But, if you need access to the `ComponentData` or `ActionTriggeredEvent` from within an auto 
 deserialized component, action handler or class, you can have it by adding a parameter with type `DeserializationContext`.
 
-When the Nimbus Processor see the type `DeserializationContext`, it injects the current context into the function. We recommend doing this as a last
+When Nimbus Processor see the type `DeserializationContext`, it injects the current context into the function. We recommend doing this as a last
 resort because this will couple your application code with Nimbus.
 
 The `DeserializationContext` contains:
 - `component`: the [`ComponentData`](manual/component.md#componentdata) if this is the deserialization of a component.
 - `event`: the [`ActionTriggeredEvent`](manual/action.md#actiontriggeredevent) if this is the deserialization of an action handler.
 
-See the example below where we need to get information about the parent of the component to make a decision:
+See the example below where we need to get information about the parent of the component:
 
 ```kt
 import br.com.zup.nimbus.annotation.AutoDeserialize

@@ -3,12 +3,12 @@ Check the [specification](/specification/operation.md) to know more about the de
 
 # Creating your own Operations
 Nimbus already comes with some [pre-defined operations](/specification/default-operations.md), but for most applications, they're not enough and we
-need to extend this set.
+need to extend them.
 
 We'll use a function to format a value as a currency as an example.
 
 ### 1. Implement the operation
-Create the function just like any other Kotlin function:
+Create the function just like any other Kotlin function and add the annotation `@AutoDeserialize` to it.
 
 ```kotlin
 import br.com.zup.nimbus.annotation.AutoDeserialize
@@ -52,7 +52,7 @@ When registering an operation, Nimbus provides all the parameters that were pass
 wrapped in a `List` of `Any`.
 
 Deserializing items in a list of unknown types can be very boring, repetitive and dangerous. For this reason, we recommend using the method described
-in this topic (automatic), which requires both the packages "Nimbus Compose Annotations" and "Nimbus Compose Processor".
+in this topic (automatic), which requires both the packages "Nimbus Compose Annotation" and "Nimbus Compose Processor".
 
 If you want to learn the manual approach, which doesn't rely on code generation, please read the topic 
 ["Operations: manual deserialization"](manual/action.md) instead.

@@ -1,6 +1,4 @@
 # Components (manual deserialization)
-Check the [specification](/specification/component.md) to know more about the definition of Nimbus Components.
-
 This topic will show how to manually deserialize a component. If you want to learn the automatic and recommended approach (code generation), please
 read the topic ["Components"](../component.md) instead.
 

@@ -1,6 +1,4 @@
 # Actions (manual deserialization)
-Check the [specification](/specification/action.md) to know more about the definition of Nimbus Actions.
-
 This topic will show how to manually deserialize an action handler. If you want to learn the automatic and recommended approach (code generation),
 please read the topic ["Actions"](../action.md) instead.
 

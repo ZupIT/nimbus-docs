@@ -7,10 +7,10 @@
 - Kotlin 1.6 or above
 
 ## 1. Installing
-You can download the Nimbus library from mavenCentral by writing the following to `build.gradle` files:
+You can download the Nimbus library from mavenCentral by writing the following to the `build.gradle` files:
 
 `root build.gradle`
-```
+```kt
 // Here you define that your projects need to locate dependencies on maven central repository
 allprojects {
     repositories {
@@ -20,7 +20,7 @@ allprojects {
 ```
 
 `app build.gradle`
-```
+```kt
 plugins {
     // Support for auto-deserialization
     id("com.google.devtools.ksp") version "1.7.10-1.0.6" // use the latest version of KSP according to your Kotlin version
@@ -53,7 +53,8 @@ You should use the [most recent version of Nimbus Compose](https://mvnrepository
 We added both the core Nimbus library and a component library for layout components. Our examples will use both, but if your project won't use
 the layout components, you don't need to the second dependency.
 
-We also added the processor for generating code for the auto-deserialization of components.
+We also added KSP, Nimbus Annotations and Nimbus Processor for generating code for the auto-deserialization of components, action handlers and 
+operations. If you're going to use manual deserialization only (not recommended), you can remove these dependencies.
 
 ## 2. Adding permissions
 Just like any other Android application that makes network requests. To use Nimbus, you must add Internet permissions to your manifest. For more details

@@ -3,7 +3,7 @@ Check the [specification](/specification/action.md) to know more about the defin
 
 ## Creating your own Actions
 Nimbus already comes with some [pre-defined actions](/specification/default-actions.md), but for most applications, they're not enough and we
-need to extend the set of actions.
+must extend them.
 
 We'll create an action that logs a message to the console as an example. This action receives two parameters:
 
@@ -24,8 +24,8 @@ fun log(message: String, level: LogLevel?) {
 }
 ```
 
-`@AutoDeserialize` marks your action handler (function) for code generation. The next time you build the project, a version of this composable 
-function that accepts an instance of `ActionTriggeredEvent` will be available.
+`@AutoDeserialize` marks your action handler (function) for code generation. The next time you build the project, a version of this function that 
+accepts an instance of `ActionTriggeredEvent` will be available.
 
 To know more about the auto-deserialization, [read this topic](auto-deserialization.md).
 
@@ -58,7 +58,7 @@ the type `ActionTriggeredEvent` and the properties of the action can be accessed
 `String` to `Any?`.
 
 Deserializing items in a list of unknown types can be very boring, repetitive and dangerous. For this reason, we recommend using the method described
-in this topic (automatic), which requires both the packages "Nimbus Compose Annotations" and "Nimbus Compose Processor".
+in this topic (automatic), which requires both the packages "Nimbus Compose Annotation" and "Nimbus Compose Processor".
 
 If you want to learn the manual approach, which doesn't rely on code generation, please read the topic 
 ["Actions: manual deserialization"](manual/action.md) instead.
