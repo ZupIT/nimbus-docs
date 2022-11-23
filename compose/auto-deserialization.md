@@ -120,6 +120,35 @@ fun deserializeStringStack(data: AnyServerDrivenData): Stack<String> {
 A custom deserializer can also receive the [`DeserializationContext`](#the-deserializationcontext) as a parameter, it doesn't matter which comes 
 first, the `AnyServerDrivenData` or the `DeserializationContext`.
 
+## Default parameter values
+We can't read a default parameter value from Kotlin Symbol Processor (KSP). For this reason, be aware that whenever you use a default value for a
+parameter, this value will apply only for your own calls and not for server driven views. See the example below:
+
+```kt
+@Composable
+@AutoDeserialize
+fun Button(label: String, onPress: () -> Unit, enabled: Boolean = true) {
+    Button(onClick = onPress, enabled = enabled) {
+        Text(label)
+    }
+}
+```
+
+If the JSON doesn't specify any value for the property `enabled` or specifies null, the deserialization will fail, because it expects a boolean value
+to be available, remember: default values can't be seen by the annotation processor.
+
+For this reason, we advise the developer to not use default values and instead, accept optional parameters:
+
+```kt
+@Composable
+@AutoDeserialize
+fun Button(label: String, onPress: () -> Unit, enabled: Boolean?) {
+    Button(onClick = onPress, enabled = enabled != false) {
+        Text(label)
+    }
+}
+```
+
 ## Ignoring a parameter
 Sometimes we may want the Nimbus Processor to completely ignore a parameter of our functions. As long as the parameter has been assigned a default
 value, this can be done via the annotation `@Ignore`.
