@@ -65,5 +65,5 @@ If you want to learn the manual approach, which doesn't rely on code generation,
 
 # Read next
 :point_right: If you want to learn how to manually deserialize an operation: [Actions: manual deserialization](manual/action.md)
-:point_right: If you want to know more about the auto-deserialization: [Auto component deserialization](auto-deserialization.md)
+:point_right: If you want to know more about the auto-deserialization: [Automatic deserialization](auto-deserialization.md)
 :point_right: Otherwise: [Configuration](configuration.md)

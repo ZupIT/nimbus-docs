@@ -12,6 +12,19 @@ that returns something other than `Unit`.
 
 This is a very powerful tool because it lets the developer concentrate in the business logic instead of dealing with deserialization.
 
+## Summary
+- [`@AutoDeserialize`](#automatic-deserialization): can be used on components (composable functions), action handlers and operations. It tells the 
+Nimbus Processor to create a version of the function that accepts the raw data from the backend (JSON) and calls the original function with the 
+desired types.
+- [`@Deserialize`](#custom-deserializers): can be used on functions to create a custom deserializer for types that are not supported by the Nimbus 
+Processor or types that you want a different strategy than the default.
+- [`@Ignore`](#ignoring-a-parameter): can be used on parameters in order to inform Nimbus Processor to ignore them.
+- [`@Root`](#the-root-facilitator): can be used on parameters in order to inform Nimbus Processor not to consider them as keys and continue 
+to deserialize the same level of the map.
+- [`@Alias`](#renaming-a-property): can be used on parameters in order to inform Nimbus Processor that they have another name in the backend.
+- [`DeserializationContext`](#the-deserializationcontext): this type can be used on a parameter to tell Nimbus Processor to inject the current
+deserialization context.
+
 ## Supported types for deserialization
 When a function is annotated with `@AutoDeserialize`, all of its parameters will be read by the annotation processor. Nimbus can deserialize every
 parameter typed as:
@@ -24,9 +37,10 @@ parameter typed as:
 - `Double`
 - `Map<String, *>`
 - `List<*>`
-- `Enums`
-- `() -> Unit`
-- `(Any?) -> Unit`
+- `Enum<*>`
+- `() -> Unit`: interpreted as `ServerDrivenEvent`.
+- `(Any?) -> Unit`: interpreted as `ServerDrivenEvent` with state.
+- `@Composable (*) -> Unit`: interpreted as the children (content) of the component. `*` here means any number of parameters, of any type.
 - Classes with public default constructors that accepts at least one parameter of any of these types.
 
 Nimbus Processor generates code that will always try to make sense of the values in the property map. For instance, if the function needs a
@@ -34,10 +48,17 @@ String, but the value is an Int, the string representation of the number will be
 value is converted; and so on. To know of all the type coercion that this system makes, please check the code documentation for the class
 `AnyServerDrivenData`.
 
-In the previous list, notice that function types are accepted. These will always be interpreted as Server Driven Events, which carries [Actions]
-(/specification/action.md). Events will always be properties like "onClick', "onPress", "onChange", "onFocus", "onBlur", "onSuccess", "onError", etc;
-and they will run every action brought in the JSON when the function is called. The functions that accept a parameter are events that need to declare
-a state value, for example, the "onChange" event of a text input declares its current value to its actions.
+In the previous list, notice that function types are accepted. These will always be interpreted as Server Driven Events when not annotated with
+`@Composable`. Server Driven Events carry [Actions] (/specification/action.md). Events will always be properties like "onClick', "onPress", 
+"onChange", "onFocus", "onBlur", "onSuccess", "onError", etc; and they will run every action brought in the JSON when the function is called. The 
+functions that accept a parameter are events that need to declare a state value, for example, the "onChange" event of a text input declares its 
+current value to its actions.
+
+Parameters that are functions annotated with `@Composable` will receive the composable function that renders the children of the component. If the
+component has no children, it will render an empty `Column`.
+
+> Attention: the composable function type is only accepted as a parameter of a composable function (component). An error at build time will be raised
+if this type is used for an action handler or operation. The other types of functions (events), are not acceptable inside operations.
 
 A class type is deserialized by the annotation processor by generating a function at the same location as the class named `deserializeClassName`,
 where `ClassName` is the name of the class. This function receives the raw data and creates an instance of the class. This process is done recursively
@@ -51,12 +72,12 @@ Any type not mentioned in the first list can't be automatically deserialized, im
 - Interfaces other than Map, List and Enum.
 - Classes without public constructors.
 - Classes with public constructors that don't accept a parameter.
-- Functions that receive more than one parameter.
+- Functions that receive more than one parameter and are not composable.
 - Functions that return anything other than `Unit`.
 
 ## Custom deserializers
-When a type can't be deserialized, we can create a custom deserialization function ourselves. It suffices to write a function that receives the data
-(`AnyServerDrivenData`) and returns the desired type. See an example for `java.util.date`:
+When a type can't be deserialized, we can create a deserialization function ourselves. It suffices to write a function that receives the data
+(`AnyServerDrivenData`) and returns the desired type. See an example for `java.util.Date`:
 
 `DateDeserializer.kt`
 ```kt
@@ -68,7 +89,7 @@ fun deserializeDate(data: AnyServerDrivenData): Date? = if (data.isNull()) null 
 ```
 
 Now, whenever we use the type `Date` in a component, action handler or operation annotated with `@AutoDeserialize`, instead of throwing a compilation
-at build time, the Nimbus processor will use this custom deserializer.
+error at build time, the Nimbus processor will use this custom deserializer.
 
 If the type accepts a generic argument, the deserializer must be implemented for the generic argument. See an example below:
 
@@ -78,7 +99,9 @@ import br.com.zup.nimbus.annotation.AutoDeserialize
 import java.util.Stack
 
 @AutoDeserialize
-fun MyAction(stack: Stack<String>)
+fun MyAction(stack: Stack<String>) {
+    // ...
+}
 ```
 
 `StackDeserializer.kt`
@@ -94,8 +117,8 @@ fun deserializeStringStack(data: AnyServerDrivenData): Stack<String> {
 }
 ```
 
-A custom deserializer can also receive the [`DeserializationContext`](todo) as a parameter, it doesn't matter which comes first, the
-`AnyServerDrivenData` or the `DeserializationContext`.
+A custom deserializer can also receive the [`DeserializationContext`](#the-deserializationcontext) as a parameter, it doesn't matter which comes 
+first, the `AnyServerDrivenData` or the `DeserializationContext`.
 
 ## Ignoring a parameter
 Sometimes we may want the Nimbus Processor to completely ignore a parameter of our functions. As long as the parameter has been assigned a default
@@ -208,11 +231,11 @@ With `@Root` the code can be better organized and easily reused. This annotation
 the property map to instantiate the class, that all properties needed to build it is already in the current level of the map. For this reason, when
 `@Root` is used on a parameter, its name makes no difference in the outcome.
 
-When `@Root` is used in a required type, the auto-deserialization will attempt to instantiate the type every time. When `@Root` is used in an optional
+When `@Root` is used on a required type, the auto-deserialization will attempt to instantiate the type every time. When `@Root` is used on an optional
 type, the auto-deserialization will only attempt to instantiate the type if at least one of its properties exist in the map, otherwise it will be
 assigned `null`.
 
-It's important to notice some situations where the use of `@Root` doesn't make sense and will throw errors at build time:
+`@Root` can't be used in every scenario, here are some use cases where the use of `@Root` doesn't make sense and will throw errors at build time:
 - `@Root` can only be used on non-primitive types without an associated custom deserializer (`@Deserialize`).
 - `@Root` can't be used in operations.
 - The developer must not create cyclic references with the `@Root` annotation.
@@ -270,61 +293,19 @@ fun MyComponent(text: String, context: DeserializationContext) {
 This is a very specific component that needs to be aware of the component structure that came from the backend. This situation is very rare, but
 can be addressed by our current solution if needed.
 
-In action handlers this may be more common since we might want to get a reference to the component that triggered the event. See the example below:
+In action handlers this may be more common since we might want to get a reference to some of the services registered to the current instance of
+Nimbus. See the example below where we use the Logger to write a log message.
 
-// PAREI AQUI
+```kt
+import br.com.zup.nimbus.annotation.AutoDeserialize
+import br.zup.com.nimbus.compose.deserialization.DeserializationContext
 
-## Annotations
-
-### For functions
-- `@AutoDeserialize`: makes the composable function, action handler or operation deserializable and usable as `functionName(it)` when registering it 
-to a `NimbusComposeUILibrary`.
-- `@Deserializer`:
-
-### For function arguments
-- `@Root`: forces the value to be built using the entries at the root of the property map and not the sub-map indicated by the parameter name.
-- `@Ignore`: ignores the argument when deserializing. This can only be used in optional arguments.
-- `@Computed(TypeDeserializer)`: uses a custom deserializer to build the argument.
-
-## Custom deserializers (TypeDeserializer)
-Sometimes you don't want to code a deserializer for the entire Composable function, but instead, just for some of its arguments. To do this, you can:
-
-1. Build a TypeDeserializer for the argument type. See below an example for the type `AdaptiveSize` of the layout library:
-
-```kotlin
-object AdaptiveSizeDeserializer: TypeDeserializer<AdaptiveSize?> {
-    override fun deserialize(
-        properties: ComponentDeserializer,
-        data: ComponentData,
-        name: String,
-    ): AdaptiveSize? {
-        val sizeString = properties.asStringOrNull(name)?.lowercase()
-        if (sizeString == "expand") return AdaptiveSize.Expand
-        if (sizeString == "fitcontent") return AdaptiveSize.FitContent
-        val sizeDouble = properties.asDoubleOrNull(name)
-        return sizeDouble?.let { AdaptiveSize.Fixed(it) }
-    }
+@AutoDeserialize
+fun log(message: String, context: DeserializationContext) {
+    val logger = context.event?.scope?.nimbus?.logger
+    logger?.error?.let { it(message) }
 }
 ```
 
-Attention: the deserializer must always be an object.
-
-2. Annotate the argument inside the Composable function. See the example below for the width and height of a Row:
-
-```
-@ServerDrivenComponent
-@Composable
-fun Row(
-    // ...
-    @Root @Computed(AdaptiveSizeDeserializer::class) val width: AdaptiveSize?
-    @Root @Computed(AdaptiveSizeDeserializer::class) val height: AdaptiveSize?
-) {
-    // ...
-}
-```
-
-We also used `@Root` because we want the `AdaptiveSize` to be deserialized using the root properties and not properties inside a sub-map called
-`width` or `height`.
-
-## Read next
+# Read next
 :point_right: [State](state.md)

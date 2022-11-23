@@ -7,8 +7,11 @@ topics.
 ## Topics
 - [Getting started](getting-started.md)
 - [Components](component.md)
-- [Auto component deserialization](auto-deserialization.md)
 - [State](state.md)
 - [Operations](operation.md)
 - [Actions](action.md)
 - [Configuration](configuration.md)
+- [Automatic deserialization](auto-deserialization.md)
+- [Manual deserialization for components](manual/component.md)
+- [Manual deserialization for operations](manual/operation.md)
+- [Manual deserialization for actions](manual/action.md)
