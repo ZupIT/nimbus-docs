@@ -3,32 +3,54 @@ Check the [specification](/specification/operation.md) to know more about the de
 
 # Creating your own Operations
 Nimbus already comes with some [pre-defined operations](/specification/default-operations.md), but for most applications, they're not enough and we
-need to extend this set.
+need to extend them.
 
-We'll use a function that validates `trim` as an example. `trim` receives a string as parameter and returns the same string but without every space before the
-first character and every space after the last character.
+We'll use a function to format a value as a currency as an example.
 
 ### 1. Implement the operation
-Create the function just like any other Swift function:
+Write the structure with parameters and conforms with protocol `OperationDecodable`.
 
 ```swift
-func trim(_ string: String?) -> String? {
-  string?.trimmingCharacters(in: .whitespaces)
+import NimbusSwiftUI
+
+struct FormatCurrency: OperationDecodable {
+  static var properties = ["value", "currency"]
+  
+  var value: Double
+  var currency: String
+  
+  func execute() -> String? {
+    let formatter = NumberFormatter()
+    formatter.numberStyle = .currency
+    formatter.currencyCode = code
+    return formatter.string(from: NSNumber(value: value))
+  }
 }
 ```
 
+The `OperationDecodable` protocol is defined as follows:
+
+```swift
+public protocol OperationDecodable: Decodable {
+  associatedtype Return
+  func execute() -> Return
+  
+  static var properties: [String] { get }
+}
+```
+
+- `func execute() -> Return`: A function that holds the implementation of the operation and returns a generic type `Return`.
+- `static var properties: [String]`: An array with each element being the name of the struct's properties in the order they appear in the operation.
+
 ### 2. Register the operation
-You must register the action to a UI Library.
+The same structure used for registering components and actions is used for registering operations: `NimbusComposeUILibrary`. See the example below:
 
 ```swift
 let myAppUI = NimbusSwiftUILibrary("myApp")
-  .addOperation("trim") { trim($0.get(index: 0) as? String) }
+  .addOperation("formatCurrency", FormatCurrency.self)
 ```
 
-> Attention: right now we have to deal with untyped data and manually deserialize the list of parameters for an operation. We intend to improve this
-experience before a stable release.
-
-Whenever the operation "trim" is used by a server driven view, the function `trim` will be called with its first parameter. 
+Whenever the operation "myApp:formatCurrency" is used by a server driven view, the struct `FormatCurrency` will be executed. 
 
 ### 3. Certify your UI Library is registered to your Nimbus instance
 ```swift
@@ -46,4 +68,5 @@ struct ContentView: View {
 ```
 
 # Read next
-:point_right: [Actions](action.md)
+:point_right: If you want to learn more about the `Decodable` usage in NimbusSwiftUI: [Decodable](decodable.md).
+:point_right: Otherwise: [Actions](action.md)

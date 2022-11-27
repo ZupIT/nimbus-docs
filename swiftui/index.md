@@ -7,6 +7,7 @@ topics.
 ## Topics
 - [Getting started](getting-started.md)
 - [Components](component.md)
+- [Decodable](decodable.md).
 - [State](state.md)
 - [Operations](operation.md)
 - [Actions](action.md)
