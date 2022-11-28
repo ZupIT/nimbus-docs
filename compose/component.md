@@ -1,5 +1,5 @@
 # Components
-Check the [specification](/specification/component.md) to know more about the definition of Nimbus Components. 
+Check the [specification](/specification/component.md) to know more about the definition of Nimbus Components.
 
 ## Creating components
 Let's see an example for creating a Button component. This component must accept the following properties:
@@ -9,64 +9,25 @@ Let's see an example for creating a Button component. This component must accept
 - `onPress`: function, required. Callback to run when the button is pressed.
 
 ### 1. Create the composable function
-Create your component just like any other Composable:
+Create your component just like any other Composable and add the annotation `@AutoDeserialize`:
 
 ```kotlin
+import br.com.zup.nimbus.annotation.AutoDeserialize
+
 @Composable
-fun MyButton(text: String, enabled: Boolean = true, onPress: () -> Unit) {
-    Button(enabled = enabled, content = { Text(text) }, onClick = { onPress() })
-}
-```
-
-### 2.1 Register the component to a UI Library (manual deserialization)
-Tell Nimbus the component exists, its name, and how to deserialize a Nimbus UI node (`ServerDrivenNode`) into the component.
-
-```kotlin
-val myAppUI = NimbusComposeUILibrary("myApp")
-    .addComponent("button") @Composable {
-        val onPress = element.properties?["onPress"]
-        MyButton(
-            text = it.node.properties?.get("text") as String,
-            onPress = { if (onPress is ServerDrivenEvent) onPress.run() },
-            enabled = element.properties?["enabled"] as Boolean ?: true,
-        )
-    },
-)
-```
-
-Whenever the component "myApp:button" is used by a server driven view, the composable function above will be called with the `ServerDrivenNode`
-representing it (element). 
-
-Whenever a property represents an event, it will be an instance of ServerDrivenEvent, which can be run through the function `run()`. Another way
-to run an event is through `run(Any)`, which can be used for events that create a state, like an `onChange` inside a text input.
-
-A component builder accepts a single argument which is of type `ComponentData`. A `ComponentData` contains:
-
-- `children`: a composable function to render the children of this component.
-- `node`: the current component.
-  - `id`: the unique id for this component;
-  - `component`: the name of this component. In this example, it will always be "myApp:button";
-  - `properties`: the map of properties for this component;
-  - `children`: a collection of `ServerDrivenNode` representing the children of this component.
-
-### 2.2 Register the component to a UI Library (automatic deserialization)
-It is a pain to manually deserialize every component. Furthermore, the code in the previously example is not safe, what if the backend didn't pass
-the data with the expected type? All possible errors should have treated.
-
-Fortunately, we have a code generator that creates the entirely deserialization process for your component. It suffices to add the annotation
-`@ServerDrivenComponent` to your composable. See the example below:
-
-```kotlin
-@ServerDrivenComponent
-@Composable
+@AutoDeserialize
 fun MyButton(text: String, enabled: Boolean?, onPress: () -> Unit) {
-    Button(enabled = enabled ?: true, content = { Text(text) }, onClick = { onPress() })
+    Button(enabled = enabled != false, content = { Text(text) }, onClick = { onPress() })
 }
 ```
 
-The only difference is that now, you can't use default values for the function parameters, since this is not supported by annotation processors.
+`@AutoDeserialize` marks your composable function for code generation. The next time you build the project, a version of this composable function
+that accepts an instance of `ComponentData` will be available.
 
-When registering the component, just call `YourComponent(it)`:
+To know more about the auto-deserialization, [read this topic](auto-deserialization.md).
+
+### 2. Register the component to the UI Library
+The same structure used for registering actions and operations is used for registering components: `NimbusComposeUILibrary`. See the example below:
 
 ```kotlin
 val myAppUI = NimbusComposeUILibrary("myApp")
@@ -74,13 +35,13 @@ val myAppUI = NimbusComposeUILibrary("myApp")
 )
 ```
 
-Be aware that, since `MyButton(ComponentData)` is generated, you'll need to build your project before being able to use it without warnings from
-the IDE.
+> Attention: this code will be marked as invalid by the IDE until a build is performed (code generation).
 
-To know more about the auto deserialization check [this article](auto-deserialization.md).
+Whenever the component "myApp:button" is used by a server driven view, the composable function above will be called.
 
+### 3. Register the UI Library to Nimbus
+If the UI Library is not yet registered to Nimbus, please do so:
 
-### 3. Certify your UI Library is provided in the configuration
 ```kotlin
 private val nimbus = Nimbus(
     baseUrl = BASE_URL,
@@ -88,5 +49,18 @@ private val nimbus = Nimbus(
 )
 ```
 
-## Read next
-:point_right: [Auto component deserialization](auto-deserialization.md)
+## Manual vs Automatic Component deserialization
+When registering a component, Nimbus provides all the data that came from the JSON so you can call the composable function, this data is wrapped in 
+the type `ComponentData` and the properties of the component can be accessed via `ComponentData#node.properties`, which is a map of `String` to
+`Any?`.
+
+Deserializing items in a list of unknown types can be very boring, repetitive and dangerous. For this reason, we recommend using the method described
+in this topic (automatic), which requires both the packages "Nimbus Compose Annotation" and "Nimbus Compose Processor".
+
+If you want to learn the manual approach, which doesn't rely on code generation, please read the topic 
+["Components: manual deserialization"](manual/component.md) instead.
+
+# Read next
+:point_right: If you want to learn how to manually deserialize a component: [Components: manual deserialization](manual/component.md)
+:point_right: If you want to know more about the auto-deserialization: [Automatic deserialization](auto-deserialization.md)
+:point_right: Otherwise: [State](state.md)

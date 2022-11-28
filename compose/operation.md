@@ -3,41 +3,61 @@ Check the [specification](/specification/operation.md) to know more about the de
 
 # Creating your own Operations
 Nimbus already comes with some [pre-defined operations](/specification/default-operations.md), but for most applications, they're not enough and we
-need to extend this set.
+need to extend them.
 
-We'll use a function to `trim` as an example. `trim` receives a string as parameter and returns the same string but without every space before the
-first character and every space after the last character.
+We'll use a function to format a value as a currency as an example.
 
 ### 1. Implement the operation
-Create the function just like any other Kotlin function:
+Create the function just like any other Kotlin function and add the annotation `@AutoDeserialize` to it.
 
 ```kotlin
-fun trim(value: String): String {
-    return value.trim()
+import br.com.zup.nimbus.annotation.AutoDeserialize
+import java.text.NumberFormat
+import java.util.Currency
+
+@AutoDeserialize
+fun formatCurrency(value: Double, currency: String): String {
+    val formatter: NumberFormat = NumberFormat.getCurrencyInstance()
+    formatter.maximumFractionDigits = 2
+    formatter.currency = Currency.getInstance(currency)
+    return formatter.format(value)
 }
 ```
 
 ### 2. Register the operation
-The same structure used for registering components and actions is used for registering operations: NimbusComposeUILibrary. See the example below:
+The same structure used for registering components and actions is used for registering operations: `NimbusComposeUILibrary`. See the example below:
 
 ```kotlin
 val myAppUI = NimbusComposeUILibrary("myApp")
-    .addOperation("trim") { trim(it[0] as String) },
+    .addOperation("formatCurrency") { formatCurrency(it) },
 )
 ```
 
-Whenever the operation "trim" is used by a server driven view, the function `trim` will be called with its first parameter. `it` is a list containing
-all arguments passed to the operation by Nimbus.
+> Attention: this code will be marked as invalid by the IDE until a build is performed (code generation).
 
-Attention: we intend to create a more intuitive and type-safe way for writing operations.
+Whenever the operation "formatCurrency" is used by a server driven view, the function `formatCurrency` will be called.
 
-### 3. Certify your ui lib is provided in the configuration
+### 3. Register the UI Library to Nimbus
+If the UI Library is not yet registered to Nimbus, please do so:
+
 ```kotlin
 private val nimbus = Nimbus(
-    // ...
+    baseUrl = BASE_URL,
     ui = listOf(layoutUI, myAppUI),
 )
 ```
 
+## Manual vs Automatic Action deserialization
+When registering an operation, Nimbus provides all the parameters that were passed to the function call in the expression. These parameters are
+wrapped in a `List` of `Any`.
+
+Deserializing items in a list of unknown types can be very boring, repetitive and dangerous. For this reason, we recommend using the method described
+in this topic (automatic), which requires both the packages "Nimbus Compose Annotation" and "Nimbus Compose Processor".
+
+If you want to learn the manual approach, which doesn't rely on code generation, please read the topic 
+["Operations: manual deserialization"](manual/action.md) instead.
+
 # Read next
-:point_right: [Actions](action.md)
+:point_right: If you want to learn how to manually deserialize an operation: [Operations: manual deserialization](manual/operation.md)
+:point_right: If you want to know more about the auto-deserialization: [Automatic deserialization](auto-deserialization.md)
+:point_right: Otherwise: [Actions](action.md)

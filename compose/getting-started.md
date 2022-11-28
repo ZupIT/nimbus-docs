@@ -7,10 +7,11 @@
 - Kotlin 1.6 or above
 
 ## 1. Installing
-You can download the Nimbus library from mavenCentral by writing the following to your `build.gradle` file:
+You can download the Nimbus library from mavenCentral by writing the following to the `build.gradle` files:
 
-```
-//Here you define that your projects need to locate dependencies on maven central repository
+`root build.gradle`
+```kt
+// Here you define that your projects need to locate dependencies on maven central repository
 allprojects {
     repositories {
         mavenCentral()
@@ -18,22 +19,22 @@ allprojects {
 }
 ```
 
-```
+`app build.gradle`
+```kt
 plugins {
-    // ...
-    // Support for auto-deserialization. Use the latest version of ksp according to your Kotlin version.
-    id("com.google.devtools.ksp") version "1.6.10-1.0.4"
+    // Support for auto-deserialization
+    id("com.google.devtools.ksp") version "1.7.10-1.0.6" // use the latest version of KSP according to your Kotlin version
 }
 
 dependencies {
-    // ...
     // Nimbus compose base library
-    implementation "br.com.zup.nimbus:nimbus-compose:${nimbusComposeVersion}". 
-    // Recommended if you don't want to implement the layout components yourself
-    implementation "br.com.zup.nimbus:nimbus-layout-compose:${nimbusComposeLayoutVersion}"
+    implementation("br.com.zup.nimbus:nimbus-compose:$version")
+    // Layout components for Nimbus
+    implementation("br.com.zup.nimbus:nimbus-layout-compose:$version")
     // Support for auto-deserialization
-    ksp("br.com.zup.nimbus:nimbus-compose-processor:${nimbusComposeVersion}")
-  }
+    implementation("br.com.zup.nimbus:nimbus-compose-annotation:$version")
+    ksp("br.com.zup.nimbus:nimbus-compose-processor:$version")
+}
 
 // Support for auto-deserialization
 kotlin {
@@ -47,10 +48,13 @@ kotlin {
 }
 ```
 
-Above, we added both the core Nimbus library and a component library for layout components. Our examples will use both, but if your project won't use
+You should use the [most recent version of Nimbus Compose](https://mvnrepository.com/artifact/br.com.zup.nimbus/nimbus-compose) for `$version`.
+
+We added both the core Nimbus library and a component library for layout components. Our examples will use both, but if your project won't use
 the layout components, you don't need to the second dependency.
 
-We also added the processor for generating code for the auto-deserialization of components.
+We also added KSP, Nimbus Annotations and Nimbus Processor for generating code for the auto-deserialization of components, action handlers and 
+operations. If you're going to use manual deserialization only (not recommended), you can remove these dependencies.
 
 ## 2. Adding permissions
 Just like any other Android application that makes network requests. To use Nimbus, you must add Internet permissions to your manifest. For more details

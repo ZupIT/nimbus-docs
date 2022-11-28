@@ -3,59 +3,67 @@ Check the [specification](/specification/action.md) to know more about the defin
 
 ## Creating your own Actions
 Nimbus already comes with some [pre-defined actions](/specification/default-actions.md), but for most applications, they're not enough and we
-need to extend the set of actions.
+must extend them.
 
-We'll create an action that logs a message to the console as an example. This action receives a single parameter:
+We'll create an action that logs a message to the console as an example. This action receives two parameters:
 
 - `message`: string, required. The message to log.
+- `level`: LogLevel, optional. The type of log.
 
 ### 1. Write the Action Handler
+Write the function like any other Kotlin function and add the annotation `@AutoDeserialize` to it.
+
 ```kotlin
-fun log(message: String) {
-    print(message)
+import br.com.zup.nimbus.annotation.AutoDeserialize
+
+enum class LogLevel { Info, Warning, Error }
+
+@AutoDeserialize
+fun log(message: String, level: LogLevel?) {
+    println("${level ?: LogLevel.Info}: $message")
 }
 ```
 
-First, we get the property "message" from the event. Then, we check if it is correct (if it is a String) and print it to the console.
+`@AutoDeserialize` marks your action handler (function) for code generation. The next time you build the project, a version of this function that 
+accepts an instance of `ActionTriggeredEvent` will be available.
 
-An `ActionTriggeredEvent` has the following properties:
-
-- `action`: the action triggered by the event. Use this object to find the name of the action, its properties and metadata. This will be the only
-information you'll need for almost every action handler you'll write.
-- `scope`: the scope where the action was triggered. This will always be a `ServerDrivenEvent` and contain information like the event name and the
-entire scope hierarchy. Example of scope hierarchy: this event > parent event > node > another node > view > nimbus. Any of these scopes can be
-retrieved via the `parent` pointer.
-- `dependencies`: tell the Nimbus lifecycle which dependencies may have changed so it can propagate updates through its dependency graph. You'll
-probably never need to use this, but it's used by the core action `setState` to update the UI after a state changes its value.
-
-Most action handlers will only need `action.properties`.
+To know more about the auto-deserialization, [read this topic](auto-deserialization.md).
 
 ### 2. Register the action handler
-The same structure used for registering components and actions is used for registering operations: NimbusComposeUILibrary. See the example below:
+The same structure used for registering components and operations is used for registering actions: `NimbusComposeUILibrary`. See the example below:
 
 ```kotlin
 val myAppUI = NimbusComposeUILibrary("myApp")
-    .addAction("log") {
-        val message = it.action.properties?.get("message")
-        if (message is String) log(message)
-    }
-)
-
-val customActions: Map<String, ActionHandler> = mapOf(
-    "myApp:log" to { log(it) }
+    .addAction("log") { log(it) }
 )
 ```
-Whenever the action "myApp:log" is used by a server driven view, the function `log` will be called with the event.
 
-Attention: we intend to create a more intuitive and type-safe way for writing actions.
+> Attention: this code will be marked as invalid by the IDE until a build is performed (code generation).
 
-### 3. Certify your ui lib is provided in the configuration
+Whenever the action "myApp:log" is used by a server driven view, the function `log` will be called.
+
+### 3. Register the UI Library to Nimbus
+If the UI Library is not yet registered to Nimbus, please do so:
+
 ```kotlin
 private val nimbus = Nimbus(
-    // ...
+    baseUrl = BASE_URL,
     ui = listOf(layoutUI, myAppUI),
 )
 ```
 
+## Manual vs Automatic Action deserialization
+When registering an action handler, Nimbus provides all the data that came from the JSON so you can call the action handler, this data is wrapped in 
+the type `ActionTriggeredEvent` and the properties of the action can be accessed via `ActionTriggeredEvent#action.properties`, which is a map of 
+`String` to `Any?`.
+
+Deserializing items in a list of unknown types can be very boring, repetitive and dangerous. For this reason, we recommend using the method described
+in this topic (automatic), which requires both the packages "Nimbus Compose Annotation" and "Nimbus Compose Processor".
+
+If you want to learn the manual approach, which doesn't rely on code generation, please read the topic 
+["Actions: manual deserialization"](manual/action.md) instead.
+
 # Read next
-:point_right: [Configuration](configuration.md)
+:point_right: If you want to learn how to manually deserialize an operation: [Actions: manual deserialization](manual/action.md)
+:point_right: If you want to know more about the auto-deserialization: [Automatic deserialization](auto-deserialization.md)
+:point_right: Otherwise: [Configuration](configuration.md)
