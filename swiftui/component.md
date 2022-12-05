@@ -32,7 +32,7 @@ A json sample for this component could be:
 ```
 
 ### SwiftUI View
-Create your component just like any other SwiftUI `View` and adds conformance with `Decodable`.
+Create your component just like any other SwiftUI `View` and add conformance with `Decodable`.
 
 ```swift
 import SwiftUI

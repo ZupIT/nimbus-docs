@@ -11,7 +11,7 @@ We'll create an action that logs a message to the console as an example. This ac
 - `level`: LogLevel, optional. The type of log.
 ### 1. Write the Action structure
 
-Write the structure with parameters and conforms with protocol `ActionDecodable`.
+Write the structure with the parameters of the action and make it conform to the protocol `ActionDecodable`.
 
 ```swift
 import NimbusSwiftUI
@@ -32,7 +32,7 @@ struct LogAction: ActionDecodable {
 }
 ```
 
-The `ActionDecodable` protocol requires a `execute()` method with action implementation and requires a `Decodable` conformance. 
+The `ActionDecodable` protocol must conform to `Decodable` and implement `execute()`, which is the function called when the action is triggered.
 To know more about the `Decodable` usage in NimbusSwiftUI, [read this topic](decodable.md).
 
 ### 2. Register the action struct

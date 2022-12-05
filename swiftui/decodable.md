@@ -1,8 +1,20 @@
 # Decodable
 
-The NimbusSwiftUI use the Decodable infrastructure to transform a ServerDrivenNode, ActionTriggeredEvent or [Any] into a View hierarchy, ActionDecodable or OperationDecodable respectively. This is implemented by the NimbusDecoder that do all decoding logic, such as: handle component events and children views, decoding a Any structure considering primitive types, type coercion.
+Nimbus, in its core, doesn't know what the properties of a component or action are, these are represented by Dictionaries of unknown type. The same can be said for operations, Nimbus doesn't know how many arguments or what type of arguments are accepted, internally, it's just an array of unknown type.
 
-For take advantage of this infrastructure you need to use the resgistration APIs that use Decodable in your signature:
+In order to render components, execute actions and retrieve the result of operations, Nimbus must transform these unknown types into the types accepted by the `Views`, `ActionDecodables` and `OperationDecodables` registered to the `NimbusSwiftUILibrary`. We call this process "deserialization" and we tried to make it as seamless as possible to the developer.
+
+Nimbus uses the feature `Decodable` from Swift to make the deserialization automatic. Under the hood, the `NimbusDecoder` is used to deserialize the unknown types into the types expected by the struct. This conversion process includes error handling and type coercion, i.e. if the property or argument is of unexpected type, the decoder will first try to make sense of it, if it can't, it will log an error and not render the component or run the action or operation.
+
+`NimbusDecoder` deserializes the actual types into the expected types according to the following rules:
+- If the struct requires a string, the decoder will accept anything, but null. It uses the string representation of the type if it's not a string.
+- If the struct requires a number type, the decoder will accept any type of number, truncating the original value if the expected type can't hold it. It also accepts any string that is in the format of a number, examples: `"725487"`,  `"537.5975"`.
+- If the struct requires a boolean, the decoder will only accept boolean.
+- If the struct requires an enum, the decoder will only accept a string that represents some of the possibilities. This matching is case-insensitive.
+- If the struct requires a function, the decoder will only accept a `ServerDrivenEvent` and will deserialize it into a call to the method `run` of this structure.
+- If the struct requires a non-primitive type, this type must de decodable.
+
+To use the `NimbusDecoder` to automatic deserialize your components, actions and operations, register them using the methods that accept a Decodable:
 
 ```swift
 public func addComponent<T: ViewDecodable>(_ name: String, _ type: T.Type) -> NimbusSwiftUILibrary
@@ -14,11 +26,11 @@ public func addOperation<T: OperationDecodable>(_ name: String, _ type: T.Type) 
 
 ## Nimbus Decodable wrappers
 
-Using Decodable, we can get the synthesized implementation when all properties conform to the Decodable protocol, however, some properties are not Decodable by default, for example a function. To solve this problem and to ease the Decodable process, some property wrappers were created:
+Using Decodable, we can get the synthesized implementation when all properties conform to the Decodable protocol, however, some properties are not Decodable by default, for example, a function. To solve this problem and to ease the Decodable process, some property wrappers were created:
 
 ### @Children
 
-This property wrapper is used to anotate a children View hierarchy in a component.
+This property wrapper is used to annotate the child View hierarchy in a component.
 
 ```swift
 @propertyWrapper
@@ -27,7 +39,7 @@ public struct Children<Content: View> {
 }
 ```
 
-> Attention: When using your component with NimbusSwiftUI all children content will be an AnyView therefore you need to use AnyView type in component registration as shown in the example below.
+> Attention: When using your component with NimbusSwiftUI all child content will be of the type `AnyView`, therefore you need to use an `AnyView` in the component registration as shown in the example below.
 
 ```swift
 struct Container<Content: View>: View, Decodable {
@@ -42,9 +54,9 @@ let myAppUI = NimbusSwiftUILibrary("myApp")
   .addComponent("container", Container<AnyView>.self)
 ```
 
-### @Event and @Statefulevent
+### @Event and @StatefulEvent
 
-Used to anotate a event inside a Action or a Component definition. We have two different wrappers, one that wrap up a function with no parameters and another that wrap up a function with one generic parameter.
+Used to annotate an event inside an Action or a Component definition. We have two different wrappers, one that wraps up a function with no parameters and another that wraps up a function with one generic parameter.
 
 ```swift
 @propertyWrapper
@@ -58,11 +70,11 @@ public struct StatefulEvent<T> {
 }
 ```
 
-> Attention: All decoded events are optional and will be decoded to empty functions if the event does not exist in the json.
+> Attention: All decoded events are optional and will be decoded to empty functions if the event does not exist in the source property map (dictionary) or argument list (array).
 
 ### @CoreAction
 
-Used to anotate a ActionTriggeredEvent reference inside an Action.
+Used to annotate an `ActionTriggeredEvent` reference inside an Action.
 
 ```swift
 @propertyWrapper
@@ -87,7 +99,7 @@ struct Action: ActionDecodable {
 
 ### SwiftUI @State
 
-This property wrapper already exists in SwiftUI to create a local mutable state within a View, however it is not decodable by default, so we implement Decodable to decode an initial value for state from a json.
+This property wrapper already exists in SwiftUI to create a local mutable state within a View, however it is not decodable by default, so we implement `Decodable` to decode an initial value for the state from the source property map (dictionary) or argument list (array).
 
 ```swift
 extension KeyedDecodingContainer {
@@ -98,11 +110,11 @@ extension KeyedDecodingContainer {
 }
 ```
 
-## Decodable custom
+## Custom Decodable
 
-When using Decodable you can customize the deserialization by implement the `init(from: Decoder)` and declaring the `CodingKeys` by yourself. All wrappers previously explained can be used inside your `init(from: Decoder)` implementation.
+When using Decodable you can customize the deserialization by implementing `init(from: Decoder)` and declaring the `CodingKeys` by yourself. All wrappers previously explained can be used inside your `init(from: Decoder)` implementation.
 
-In official [documentation](https://developer.apple.com/documentation/foundation/archives_and_serialization/encoding_and_decoding_custom_types) and [here](https://www.swiftbysundell.com/articles/customizing-codable-types-in-swift/) you can learn more about Decodable and customizations.
+In the official [documentation](https://developer.apple.com/documentation/foundation/archives_and_serialization/encoding_and_decoding_custom_types) and [here](https://www.swiftbysundell.com/articles/customizing-codable-types-in-swift/) you can learn more about Decodable and customizations.
 
 Below we have the main cases of custom serialization using NimbusSwiftUI:
 
@@ -112,18 +124,20 @@ In this example we use the wrapper in the `init(from: decoder)` implementation t
 
 ```swift
 struct Container<Content: View>: View, Decodable {
-  var content: Content
+  var content: () -> Content
 
   var body: some View {
     // body impl
   }
 
-  public init(from: Decoder) throws {
-    let container = decoder.singleValueContainer()
-    content = container.decode(Children<AnyView>.self).wrappedValue()
+  init(from decoder: Decoder) throws {
+    let container = try decoder.singleValueContainer()
+    content = try container.decode(Children<Content>.self).wrappedValue
   }
 }
 ```
+
+This is equivalent to use the property wrapper @Children.
 
 ### An Action with event
 
@@ -141,12 +155,14 @@ struct Action: ActionDecodable {
     case onFinish
   }
 
-  public init(from: Decoder) throws {
-    let container = decoder.container(keyedBy: CodingKeys.self)
-    onFinish = container.decode(Event.self, forKey: .onFinish).wrappedValue
+  init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    onFinish = try container.decode(Event.self, forKey: .onFinish).wrappedValue
   }
 }
 ```
+
+This is equivalent to use the property wrapper @Event.
 
 ### A Component with Default value
 
@@ -164,9 +180,9 @@ struct Component: View, Decodable {
     case bool
   }
 
-  public init(from: Decoder) throws {
-    let container = decoder.container(keyedBy: CodingKeys.self)
-    content = container.decodeIfPresent(Bool.self, forKey: .bool) ?? true
+  init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    content = try container.decodeIfPresent(Bool.self, forKey: .bool) ?? true
   }
 }
 ```
@@ -187,8 +203,8 @@ struct Component: View, Decodable {
     // body impl
   }
 
-  public init(from: Decoder) throws {
-    nested = Nested(from: decoder)
+  init(from decoder: Decoder) throws {
+    nested = try Nested(from: decoder)
   }
 }
 ```
@@ -215,7 +231,7 @@ struct Component: View, Decodable {
 }
 ```
 
-Just declare the `CodingKeys` omitting the parameters you want to ignore.
+Just declare the `CodingKeys` omitting the parameters you want to ignore. This is very useful for declaring internal states that shouldn't interact with the properties of a component.
 
 # Read next
- :point_right: [State](state.md)
+ :point_right: [Configuration](configuration.md)

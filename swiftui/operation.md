@@ -8,7 +8,7 @@ need to extend them.
 We'll use a function to format a value as a currency as an example.
 
 ### 1. Implement the operation
-Write the structure with parameters and conforms with protocol `OperationDecodable`.
+Write the structure with the parameters of the operation and make it conform to the protocol `OperationDecodable`.
 
 ```swift
 import NimbusSwiftUI
@@ -50,7 +50,7 @@ let myAppUI = NimbusSwiftUILibrary("myApp")
   .addOperation("formatCurrency", FormatCurrency.self)
 ```
 
-Whenever the operation "myApp:formatCurrency" is used by a server driven view, the struct `FormatCurrency` will be executed. 
+Whenever the operation "formatCurrency" is used by a server driven view, the function `execute` of `FormatCurrency` will be executed.
 
 ### 3. Certify your UI Library is registered to your Nimbus instance
 ```swift

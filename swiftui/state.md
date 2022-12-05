@@ -9,20 +9,24 @@ before sending data to the UI layer that renders the components.
 It's very simple to create Components with events that use implicit states. See the example below for a component that renders a text input.
 
 ```swift
-struct TextInput: View, Decodable {
-  @State var text: String
+struct TextInputTest: View, Decodable {
+  var placeholder: String
+  var value: String
   @StatefulEvent var onChange: (String) -> Void
   
   var body: some View {
-    TextField(placeholder, text: $text)
-      .onChange(of: text) {
-        onChange($0)
-      }
+    TextField(
+      placeholder,
+      text: Binding(
+        get: { value },
+        set: { onChange($0) }
+      )
+    )
   }
 }
 ```
 
-Your View needs to conform to the `Decodable` protocol. To take advantage of the automatic synthesis of the Decodable protocol your function `onChange` will be provided by the `@StatefulEvent` property wrapper.
+Your View needs to conform to the `Decodable` protocol. To take advantage of the automatic synthesis of the Decodable protocol, your function `onChange` will be provided by the `@StatefulEvent` property wrapper.
 
 Now you can register your component and configure the `Nimbus` entrypoint with it. For more information please check [Component](component.md) page.
 
