@@ -32,7 +32,7 @@ The components `else` and `then` can't receive any property.
 {
   "_:component": "layout:column",
   "state": {
-    "id": "isMorning"
+    "isMorning": null
   },
   "children": [
     {
@@ -90,7 +90,7 @@ screen is the following:
 {
   "_:component": "layout:column",
   "state": {
-    "id": "isMorning"
+    "isMorning": true
   },
   "children": [
     {
@@ -116,7 +116,7 @@ screen is the following:
 {
   "_:component": "layout:column",
   "state": {
-    "id": "isMorning"
+    "isMorning": false
   },
   "children": [
     {

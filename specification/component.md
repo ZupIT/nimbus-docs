@@ -20,10 +20,7 @@ interface Component {
   '_:component': string,
   id?: string,
   properties?: Record<string, any>,
-  state?: {
-    id: string,
-    value: any,
-  },
+  state?: Record<string, any>,
   children?: Node[],
 }
 ```
@@ -35,7 +32,7 @@ layout:column.
 - `id`: a unique id for the node within a UI tree. When not specified, a random id is assigned by the frontend.
 - `properties`: a map with the properties for the component. If this is a text, for instance, this could be "text: string", "fontSize: double",
 "fontWeight: integer".
-- `state`: declares a [state](state.md) visible to this node and its descendants.
+- `state`: declares a set of [states](state.md) visible to this node and its descendants.
 - `children`: the nodes that are children of this node. When absent, null or an empty array, this node is a leaf.
 
 # Using components

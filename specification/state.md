@@ -16,11 +16,10 @@ when the code is run by the frontend, and not when the request is made to the se
 Local states are declared by the backend application in the body of a Component. As seen in the [topic for components](/component.md), every
 component can receive the attribute `state`.
 
-A Local state is declared with 2 properties:
-- `id`: required. An id to identify the state. Think this as the variable name. This is a string and it must match the regex
-`/^(?!(true$|false$|null$))([a-z]|[A-Z]|_)\w*$/`, i.e. it must be comprised of only letters, numbers and underscore; it can't start with a number;
-it can't be either "true", "false" or "null".
-- `value`: the initial value for this state, can be of any type. If not provided, null is used.
+Every entry in the map `state` is considered a different `LocalState`, where the key is the id of the state and the value is its initial value.
+If you don't want to set an initial value, you can set it to `null`. The id of the state identifies it, think it as a variable name. A state id
+must match the regex `/^(?!(true$|false$|null$))([a-z]|[A-Z]|_)\w*$/`, i.e. it must be comprised of only letters, numbers and underscore; it can't 
+start with a number; it can't be either "true", "false" or "null".
 
 This type of state is said to be local because its scope is only the node where it's declared and its descendants. Any node above or at the same
 level (siblings) won't be able to see the state.
@@ -34,8 +33,7 @@ An expression string always start with `@{` and ends with `}`. To make a referen
 {
   "_:component": "layout:text",
   "state": {
-    "id": "name",
-    "value": "John",
+    "name": "John",
   },
   "properties": {
     "text": "@{name}"
@@ -72,8 +70,7 @@ input. See a solution below:
 {
   "_:component": "layout:column",
   "state": {
-    "id": "text",
-    "value": ""
+    "text": ""
   },
   "children": [
     {
@@ -129,8 +126,7 @@ To change a state value, we must use the [action](/action.md) `setState`.
 {
   "_:component": "layout:column",
   "state": {
-    "id": "user",
-    "value": {
+    "user": {
       "name": "John",
       "age": 30
     }

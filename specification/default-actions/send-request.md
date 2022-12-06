@@ -50,8 +50,7 @@ Let's create a UI that shows a product list. This product list will be loaded by
 {
   "_:component": "layout:lifecycle",
   "state": {
-    "id": "products",
-    "value": []
+    "products": []
   },
   "properties": {
     "onInit": [
