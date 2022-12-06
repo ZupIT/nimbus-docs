@@ -1,5 +1,5 @@
 # Components
-Check the [specification](/specification/component.md) to know more about the definition of Nimbus Components. 
+Check the [specification](/specification/component.md) to know more about the definition of Nimbus Components.
 
 # Creating components
 
@@ -32,69 +32,40 @@ A json sample for this component could be:
 ```
 
 ### SwiftUI View
-Implementing the custom component:
+Create your component just like any other SwiftUI `View` and add conformance with `Decodable`.
 
 ```swift
 import SwiftUI
 
-struct CustomButton: View {
+struct CustomButton: View, Decodable {
   var text: String
-  var enabled: Bool = true
+  var enabled: Bool?
+
+  @Event
   var onPress: () -> Void
   
   var body: some View {
     Button(text) {
       onPress()
     }
-    .disabled(!enabled)
+    .disabled(!(enabled ?? true))
   }
 }
 ```
 
 The implementation uses `Button` and a `.disabled(Bool)` modifier, both are APIs from SwiftUI.
 
-### Deserialization
-
-To allow Nimbus to use your component, you need to tell it how to deserialize a property map into the parameters expected by the View. To do
-this, you should make your View conform to the `Deserializable` protocol:
-
-```swift
-import NimbusSwiftUI
-
-extension CustomButton: Deserializable {
-  init(from map: [String : Any]?, children: [AnyComponent]) throws {
-    self.text = try getMapProperty(map: map, name: "text")
-    self.enabled = try getMapPropertyDefault(map: map, name: "enabled", default: true)
-    let onPressEvent = getMapEvent(map: map, name: "onPress")
-    self.onPress = { onPressEvent.run() }
-  }
-}
-```
-
-There are some utils function to help in deserialization task. To more info about usage check code documentation.
-
-```swift
-public func getMapProperty<T>(map: [String: Any]?, name: String) throws -> T
-
-public func getMapEvent(map: [String: Any]?, name: String) -> ServerDrivenEvent
-
-public func getMapPropertyDefault<T>(map: [String: Any]?, name: String, default: T) throws -> T
-
-public func getMapEnumDefault<T, RawValue>(map: [String: Any]?, name: String, default: T) throws -> T where T: RawRepresentable, RawValue == T.RawValue
-```
-
-> Attention: the component deserialization should be a more automatic process and we intend to improve it a lot before release.
+> Attention: You need to use `@Event` wrapper for auto Decodable conformance of the _onPress_ parameter.
+To know more about the `Decodable` usage in NimbusSwiftUI, [read this topic](decodable.md).
 
 ### Component registration
-You must register the component to a UI Library:
+The same structure used for registering actions and operations is used for registering components: `NimbusComposeUILibrary`. See the example below:
 
 ```swift
 import NimbusSwiftUI
 
 let myAppUI = NimbusSwiftUILibrary("myApp")
-  .addComponent("button") { (element, children) in
-    AnyComponent(try CustomButton(from: element.properties, children: children))
-  }
+  .addComponent("button", CustomButton.self)
 ```
 
 ### Nimbus instance association
@@ -146,4 +117,6 @@ struct ContentView: View {
 ```
 
 # Read next
-:point_right: [State](/state.md)
+
+:point_right: If you want to learn more about the `Decodable` usage in NimbusSwiftUI: [Decodable](decodable.md).
+:point_right: Otherwise: [State](/state.md)

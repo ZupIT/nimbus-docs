@@ -10,4 +10,5 @@ topics.
 - [State](state.md)
 - [Operations](operation.md)
 - [Actions](action.md)
+- [Decodable](decodable.md).
 - [Configuration](configuration.md)
