@@ -10,7 +10,6 @@ Nimbus uses the feature `Decodable` from Swift to make the deserialization autom
 - If the struct requires a string, the decoder will accept anything, but null. It uses the string representation of the type if it's not a string.
 - If the struct requires a number type, the decoder will accept any type of number, truncating the original value if the expected type can't hold it. It also accepts any string that is in the format of a number, examples: `"725487"`,  `"537.5975"`.
 - If the struct requires a boolean, the decoder will only accept boolean.
-- If the struct requires an enum, the decoder will only accept a string that represents some of the possibilities. This matching is case-insensitive.
 - If the struct requires a function, the decoder will only accept a `ServerDrivenEvent` and will deserialize it into a call to the method `run` of this structure.
 - If the struct requires a non-primitive type, this type must de decodable.
 
