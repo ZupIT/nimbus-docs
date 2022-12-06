@@ -9,45 +9,42 @@ before sending data to the UI layer that renders the components.
 It's very simple to create Components with events that use implicit states. See the example below for a component that renders a text input.
 
 ```swift
-struct TextInput: View {
-  @State var text: String
-  var onChange: (String) -> Void
+struct TextInputTest: View, Decodable {
+  var placeholder: String
+  var value: String
+  @StatefulEvent var onChange: (String) -> Void
   
   var body: some View {
-    TextField("Hint", text: Binding<String>(get: {
-      text
-    }, set: {
-      text = $0
-      onChange($0)
-    }))
+    TextField(
+      placeholder,
+      text: Binding(
+        get: { value },
+        set: { onChange($0) }
+      )
+    )
   }
 }
 ```
 
-Notice that the component doesn't become coupled to Nimbus. This is exactly what you would do for any Component in SwiftUI. The `onChange` function
-will be provided by Nimbus and only need to be correctly deserialized in the `Deserializable` protocol implementation.
+Your View needs to conform to the `Decodable` protocol. To take advantage of the automatic synthesis of the Decodable protocol, your function `onChange` will be provided by the `@StatefulEvent` property wrapper.
+
+Now you can register your component and configure the `Nimbus` entrypoint with it. For more information please check [Component](component.md) page.
 
 ```swift
-extension TextInput: Deserializable {
-  init(from map: [String : Any]?, children: [AnyComponent]) throws {
-    self.text = try getMapProperty(map: map, name: "text")
-    
-    let function = getMapFunction(map: map, name: "onChange")
-    self.onChange = {
-      string in function(string)
+import SwiftUI
+import NimbusSwiftUI
+
+struct ContentView: View {
+  var body: some View {
+    Nimbus(baseUrl: "my-base-url") {
+      // Your navigator here
     }
+    .ui([layout, myAppUI])
   }
 }
-```
 
-Now you can create the component map and configure the `Nimbus` entrypoint with it. For more information please check [Component](component.md) page.
-
-```swift
-let components: [String: Component] = [
-  "textinput": { (element, children) in
-    AnyComponent(try TextInput(from: element.properties, children: children))
-  }
-]
+let myAppUI = NimbusSwiftUILibrary("myApp")
+  .addComponent("textInput", TextInput.self)
 ```
 
 Events always create states of their own named just like themselves. The `onChange` event above will expose a state called `onChange` for everything
