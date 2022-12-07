@@ -32,8 +32,7 @@ Dynamic: the text changes according to the input:
 {
   "_:component": "layout:column",
   "state": {
-    "id": "text",
-    "value": ""
+    "text": ""
   },
   "children": [
     {

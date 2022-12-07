@@ -29,8 +29,7 @@ A very simple example for the use of operations is a screen with a counter. The 
 {
   "_:component": "layout:column",
   "state": {
-    "id": "counter",
-    "value": 0
+    "counter": 0
   },
   "children": [
     {

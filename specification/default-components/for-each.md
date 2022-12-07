@@ -35,12 +35,11 @@ iteration. It is a best practice to always specify a key. Specifying a key will 
 {
   "_:component": "layout:column",
   "state": {
-    "id": "users",
-    "value": {
-        { "id": "u003", "name": "John", "age": 30 },
-        { "id": "u009", "name": "Mary", "age": 22 },
-        { "id": "u055", "name": "Anthony", "age": 5 }
-      }
+    "users": {
+      { "id": "u003", "name": "John", "age": 30 },
+      { "id": "u009", "name": "Mary", "age": 22 },
+      { "id": "u055", "name": "Anthony", "age": 5 }
+    }
   },
   "children": [
     {
@@ -94,12 +93,11 @@ The code above, will render the following UI tree:
 {
   "_:component": "layout:column",
   "state": {
-    "id": "users",
-    "value": {
-        { "id": "u003", "name": "John", "age": 30 },
-        { "id": "u009", "name": "Mary", "age": 22 },
-        { "id": "u055", "name": "Anthony", "age": 5 }
-      }
+    "users": {
+      { "id": "u003", "name": "John", "age": 30 },
+      { "id": "u009", "name": "Mary", "age": 22 },
+      { "id": "u055", "name": "Anthony", "age": 5 }
+    }
   },
   "children": [
     {
