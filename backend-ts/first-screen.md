@@ -73,7 +73,7 @@ default behavior, which is `get` requests, unless you really need to and know wh
 For some routes, we'll need to receive data from the request. e.g. if we use a route parameter, we need to get this
 value somehow. If we create a `post` route, we'll need to get the body of the request. To retrieve this data, when
 building the screen, we use the type `Screen`, which will be explained in the next documentation topic
-([[Giving a type to your screens]]).
+([Giving a type to your screens](screen-type.md)).
 
 ## 3. Run it!
 If your project is already running, go to the browser and access `http://localhost:3000/my-screen`. If you have

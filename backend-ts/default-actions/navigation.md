@@ -29,9 +29,9 @@ interface ProductScreenRequest extends ScreenRequest {
   }
 }
 
-export const ProductScreen: Screen<ProductScreenRequest> = ({ navigationContext }) => (
+export const ProductScreen: Screen<ProductScreenRequest> = ({ request }) => (
   <Column>
-    <Text>{navigationContext.get('productId')}</Text>
+    <Text>{request.params.productId}</Text>
   </Column>
 )
 ```
@@ -104,8 +104,8 @@ interface ScreenRequest {
    */
   body?: unknown,
   /**
-   * The type of the navigation context of this screen. If it's an order page and you expect to receive both the order
-   * id and the address from the navigation context, this should be:
+   * The type of the view states for this screen. If it's an order page and you expect to receive both the order
+   * id and the address from the navigation, this should be:
    * ```typescript
    * {
    *   orderId: string,
@@ -113,7 +113,7 @@ interface ScreenRequest {
    * }
    * ```
    */
-  navigationContext?: unknown,
+  params?: Record<string, any>,
 }
 ```
 
@@ -137,9 +137,9 @@ import { Button } from '../components/button' // the component declaration is no
 
 // ...
 
-export const ProductScreen: Screen<ProductScreenRequest> = ({ navigationContext, navigator }) => (
+export const ProductScreen: Screen<ProductScreenRequest> = ({ request, navigator }) => (
   <Column>
-    <Text>{navigationContext.get('productId')}</Text>
+    <Text>{request.params.productId}</Text>
     <Button onPress={navigator.popTo(HomeScreen)}>Go Back to home</Button>
   </Column>
 )
