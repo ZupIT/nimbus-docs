@@ -21,29 +21,18 @@ This class is used to provide local images to the components "layout:localImage"
 ## Android
 The ImageProvider:
 ```kt
-class MyImageProvider(
-    private val httpClient: HttpClient = DefaultHttpClient(),
-    private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO),
-): ImageProvider {
-
+class MyImageProvider(private val httpClient: HttpClient): ImageProvider {
     // rule for fetching remote images
-    override fun fetchRemote(url: String, onFetch: (Bitmap) -> Unit, onError: (Throwable) -> Unit) {
-        coroutineScope.launch {
-            try {
-                val response = httpClient.sendRequest(ServerDrivenRequest(
-                    url = url,
-                    method = ServerDrivenHttpMethod.Get,
-                    headers = null, body = null))
-                response.let {
-                    val bitmap = BitmapFactory.decodeByteArray(
-                        it.bodyBytes,
-                        0,
-                        it.bodyBytes.size)
-                    onFetch(bitmap)
-                }
-            } catch (e: Throwable) {
-                onError(e)
-            }
+    override suspend fun fetchRemote(url: String): Bitmap {
+        val response = httpClient.sendRequest(ServerDrivenRequest(
+            url = url,
+            method = ServerDrivenHttpMethod.Get,
+            headers = null, body = null))
+        return response.let {
+            BitmapFactory.decodeByteArray(
+                it.bodyBytes,
+                0,
+                it.bodyBytes.size)
         }
     }
 
@@ -59,7 +48,7 @@ class MyImageProvider(
 Providing the ImageProvider to Nimbus:
 
 ```kt
-ProvideNimbus(nimbus.imageProvider(MyImageProvider())) {
+ProvideNimbus(nimbus.imageProvider(MyImageProvider(nimbus.httpClient))) {
     // content + Nimbus Navigator
 }
 ```
