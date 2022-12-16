@@ -22,5 +22,4 @@ Most of the components used in the examples, although not part of the specificat
   - [`log`](default-actions/log.md)
   - [`openUrl`](default-actions/open-url.md)
   - [`sendRequest`](default-actions/send-request.md)
-  - [`setContent`](default-actions/log.md)
   - [`setState`](default-actions/set-state.md)

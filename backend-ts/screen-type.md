@@ -32,15 +32,15 @@ receive as parameter the following data:
 Use this to get the request headers, route parameters, query, body, etc.
 - `response`: [the response object from express](https://expressjs.com/en/4x/api.html#res) for the current response.
 Use this to alter the status code of the response, headers, etc.
-- `navigationContext`: a reference to the current navigation context. Read [[this topic|Context#navigation-contexts]]
-to know more about this.
+- `getViewState`: a function that gets a state linked to the current view. View states are created when a parameter
+is passed while navigating.
 - `navigator`: an instance of the class Navigator, which is a type-safe way of navigating from a screen to another.
 Always prefer using the navigator instead of the navigation actions directly from the backend-ts core. To know more
-about the Navigator, check [[this topic|Navigation#the-navigator]].
+about the Navigator, check [this topic](default-actions/navigation.md#the-navigator).
 
 With these properties injected into your screen you can get lots of information from the request and also alter the
-response! But which route params should the screen expect? What about the query params? And what's the type of the
-body anyway?
+response! But which route params should the screen expect? What about the query params and view states? And what's 
+the type of the body anyway?
 
 If your screen expects anything specific in the request, you should type it accordingly. Take as example a screen
 that shows a product with a given id. One way of receiving this id is through the url, to do so, extend the type
@@ -94,15 +94,13 @@ interface MyScreenRequest extends ScreenRequest {
       attribute4: string,
     }
   },
-  navigationContext: {
-    previousPageData: {
-      data1: string,
-      data2: number,
-    }
+  params: {
+    data1: string,
+    data2: number,
   }
 }
 
-const MyScreen: Screen<ProductRequest> = ({ request, navigationContext }) => (
+const MyScreen: Screen<ProductRequest> = ({ request, getViewState }) => (
   <>
     <>{request.params.param1}</>
     <>{request.params.param2}</>
@@ -111,8 +109,8 @@ const MyScreen: Screen<ProductRequest> = ({ request, navigationContext }) => (
     <>{request.body.attribute1}</>
     <>{request.body.attribute2}</>
     <>{request.body.attribute3.attribute4}</>
-    <>{navigationContext.previousPageData.data1}</>
-    <>{navigationContext.previousPageData.data2}</>
+    <>{getViewState('data1')}</>
+    <>{getViewState('data2')}</>
   </>
 )
 ```

@@ -10,7 +10,7 @@
 1. [Configuration file](#configuration-file)
 
 ## Introduction
-The CLI for the Nimbus Backend TS is a tool to quickly create a new project and generate screens. To get started with it, please read the topic [[Getting started]]. This article aims at explaining details about every command and option available in the tool.
+The CLI for the Nimbus Backend TS is a tool to quickly create a new project and generate screens. To get started with it, please read the topic [Getting started](getting-started.md). This article aims at explaining details about every command and option available in the tool.
 
 ## Starting up the server and Hot Reloading
 The CLI has a command to start up the server and restart it whenever the code base changes. This command also starts a websocket server that enables hot-reloading for front-end applications:
@@ -110,18 +110,16 @@ nimbus-ts gs [screen-name] [options]
 | --with-headers | -wh | The screen will expect headers to in the request. | `false` |
 | --with-body | -wb | The screen will expect the request to have a body. Invalid for "GET" requests. | `false` |
 | --with-query | -wq | The screen will expect query parameters in the URL. | `false` |
-| --with-navigation-context | -wnc | The screen will expect a navigation context. | `false` |
 
 > These options alter the code generated for the screen so it comes with all the boilerplate necessary for implementing the requested features.
 
 #### Example
-If you need your screen to accept a Navigation Context:
 ```
-nimbus-ts generate-screen --with-navigation-context screen-name 
+nimbus-ts generate-screen screen-name 
 ```
 or:
 ```
-nimbus-ts gs -wnc screen-name 
+nimbus-ts gs screen-name 
 ```
 
 The new screen will be generated according to the given options, so you can write your code faster. The screen generated in this example will be:
@@ -132,13 +130,7 @@ import { NimbusJSX } from '@zup-it/nimbus-backend-core'
 import { Text } from '@zup-it/nimbus-backend-layout'
 import { Screen } from '@zup-it/nimbus-backend-express'
 
-interface ScreenNameProps {
-  "navigationContext": {
-    "your": "navigationContext"
-  }
-}
-
-export const ScreenName: Screen<ScreenNameProps> = () => (
+export const ScreenName: Screen = () => (
   <>
     <Text>This the ScreenName screen component!</Text>
   </>

@@ -21,6 +21,3 @@ const MyScreen: FC = () => <>Hello World</>
 
 const myScreenAsJson: string = serialize(MyScreen())
 ```
-
-## Keep reading
-**Next topic: [[Advanced - Context]]**
