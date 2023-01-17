@@ -51,8 +51,7 @@ when a breaking change happens. `b` will be changed whenever a new feature is im
 ## Current development stage
 We're currently in beta for the frontend libs and in alpha for the backend lib.
 
-For the next beta, the following features and fixes can be expected:
-[Nimbus next features and fixes](nimbus-next.pdf)
+For checking progress and what's next, you can visit our public [development board and backlog](https://github.com/orgs/ZupIT/projects/26).
 
 ## Getting started
 - [Getting started with Nimbus for Jetpack Compose (Android)](compose/getting-started.md)
@@ -68,4 +67,9 @@ For the next beta, the following features and fixes can be expected:
 - [Layout components](layout/index.md)
 
 ## Samples
-Nimbus has a sample application implemented for the backend, SwiftUI and Compose. Click [here](sample/index.md) to check it out.
+Nimbus has two sample applications implemented for the backend, SwiftUI and Compose.
+
+1. [To do app](https://github.com/hernandazevedo/nimbus-todo-app): a simple to do app that lists, edit, remove and creates personal notes. The 
+implementation is not yet complete. This will serve as the basis for writing a tutorial.
+2. [Store](sample/index.md): an e-commerce app with a native navigation bar that loads server-driven content. The implementation is complete, but it's 
+a more complex example of server driven ui when compared to the first sample.
