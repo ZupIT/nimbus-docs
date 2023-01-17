@@ -73,3 +73,16 @@ Nimbus has two sample applications implemented for the backend, SwiftUI and Comp
 implementation is not yet complete. This will serve as the basis for writing a tutorial.
 2. [Store](sample/index.md): an e-commerce app with a native navigation bar that loads server-driven content. The implementation is complete, but it's 
 a more complex example of server driven ui when compared to the first sample.
+
+# Useful links
+- [Introductory article](https://medium.com/p/9a0d95686fd9/): blog post introducing Nimbus SDUI.
+- [Documentation](https://github.com/ZupIT/nimbus-docs): the documentation for both the frontend and backend libraries. This is not in a website format yet, but you can read everything through GitHub.
+- [Nimbus](https://github.com/ZupIT/nimbus): the common code between Nimbus SwiftUI and Nimbus Compose. This has been built using Kotlin Multiplatform Mobile (KMM).
+- [Nimbus Compose](https://github.com/ZupIT/nimbus-compose): all modules necessary to run Nimbus in a Jetpack Compose project.
+- [Nimbus SwiftUI](https://github.com/ZupIT/nimbus-swiftui): all modules necessary to run Nimbus in a SwiftUI project.
+- [Nimbus Compose Layout](https://github.com/ZupIT/nimbus-layout-compose): layout components for Nimbus Compose.
+- [Nimbus SwiftUI Layout](https://github.com/ZupIT/nimbus-layout-swiftui): layout components for Nimbus SwiftUI.
+- [Nimbus Backend TS](https://github.com/ZupIT/nimbus-backend-ts): modules for the backend in Typescript.
+
+## **License**
+[**Apache License 2.0**](https://github.com/ZupIT/nimbus-docs/blob/main/LICENSE.txt).
