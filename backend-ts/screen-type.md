@@ -34,6 +34,7 @@ Use this to get the request headers, route parameters, query, body, etc.
 Use this to alter the status code of the response, headers, etc.
 - `getViewState`: a function that gets a state linked to the current view. View states are created when a parameter
 is passed while navigating.
+- `triggerViewEvent`: a function that triggers a view event with the value passed as parameter.
 - `navigator`: an instance of the class Navigator, which is a type-safe way of navigating from a screen to another.
 Always prefer using the navigator instead of the navigation actions directly from the backend-ts core. To know more
 about the Navigator, check [this topic](default-actions/navigation.md#the-navigator).
@@ -94,23 +95,27 @@ interface MyScreenRequest extends ScreenRequest {
       attribute4: string,
     }
   },
-  params: {
+  state: {
     data1: string,
     data2: number,
+  },
+  events: {
+    onSave: Actions,
   }
 }
 
-const MyScreen: Screen<ProductRequest> = ({ request, getViewState }) => (
+const MyScreen: Screen<ProductRequest> = ({ request, getViewState, triggerViewEvent }) => (
   <>
-    <>{request.params.param1}</>
-    <>{request.params.param2}</>
-    <>{request.query?.queryParam1 ?? ''}</>
-    <>{request.query?.queryParam2 ?? ''}</>
-    <>{request.body.attribute1}</>
-    <>{request.body.attribute2}</>
-    <>{request.body.attribute3.attribute4}</>
-    <>{getViewState('data1')}</>
-    <>{getViewState('data2')}</>
+    <Text>{request.params.param1}</Text>
+    <Text>{request.params.param2}</Text>
+    <Text>{request.query?.queryParam1 ?? ''}</Text>
+    <Text>{request.query?.queryParam2 ?? ''}</Text>
+    <Text>{request.body.attribute1}</Text>
+    <Text>{request.body.attribute2}</Text>
+    <Text>{request.body.attribute3.attribute4}</Text>
+    <Text>{getViewState('data1')}</Text>
+    <Text>{getViewState('data2')}</Text>
+    <Button onPress={triggerViewEvent('onSave', 'value')}>Save</Button>
   </>
 )
 ```

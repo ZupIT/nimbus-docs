@@ -21,6 +21,8 @@ interface PushProperties {
   headers?: Record<string, string>,
   fallback?: Component,
   prefetch?: boolean,
+  state?: Record<string, any>,
+  events?: Record<string, Actions>
 }
 ```
 
@@ -30,13 +32,34 @@ Where:
 - `method` is the request method. Default is `'Get'`.
 - `data` is the json data to send in the request body. This is only valid for Patch, Put and Post requests.
 - `headers` is the map of headers to send in the request.
-- `fallback` is a UI tree to render if the request fails.
+- `fallback` is a UI tree to render if the request fails. Read ["More on fallback"](#more-on-fallback) for details on this.
 - `prefetch` is a boolean that, when true, makes the frontend application load the contents of the screen we wish to navigate to as soon as possible.
 This way, when the button is pressed, the navigation is immediate. Be careful with this, setting every navigation to `prefetch: true` may result high
 and unnecessary internet traffic for the user. If a prefetch request fails the navigation behaves like `prefetch` was false.
+- `state` a map where each entry is a state for the next screen: the key is the state name and the value is the initial value for the state. This is
+used to communicate values from the calling screen to the target screen. Read ["More on states and events"](#more-on-states-and-events) for an example
+on this.
+- `events` a map where each entry represents an event that can be triggered by the next screen: the key is the event name and the value is the list
+of actions to run once the event is triggered. Each of these events declares an state where the name is the event name and the value is the value
+passed when the event is triggered by the target screen. Events are used to communicate values from the target screen to the screen who called
+it. Read ["More on states and events"](#more-on-states-and-events) for an example on this.
 
-When `fallback` is not provided and the request fails, Nimbus should render an error component. This error component should be customizable by the
-user via a library configuration.
+### Example
+```json
+{
+  "_:action": "push",
+  "properties": {
+    "url": "/products"
+  }
+}
+```
+
+Suppose the navigation stack `['/home']`. The action above performs a navigation to the screen "$baseUrl/products" and after it completes, the
+navigation stack becomes `['/home', '/products']`.
+
+### More on `fallback`
+When `fallback` is not provided and the request fails, Nimbus will render an error component. This error component is customizable by the user via the
+configuration `errorComponent` of the library.
 
 The error component will always receive the following properties:
 ```typescript
@@ -50,18 +73,125 @@ Where:
 - `error` is the platform-specific error object that prevented the screen from rendering.
 - `retry` is a function that, when called, retries the navigation.
 
-### Example
+### More on states and events
+An example of navigation with states and events would be an "edition screen". Suppose we have a screen that lists to do notes and another that edits a
+specific note. Once we click in a note in the list screen, we navigate to the edit screen. Once we finish editing the note, we run the event
+"onSaveNote" to tell the list page the note must be updated. See the json snippets below:
+
+**list.json**
 ```json
 {
-  "_:action": "push",
-  "properties": {
-    "url": "/products"
-  }
+  "_:component":"forEach",
+  "properties":{
+    "items":"@{notes}",
+    "key":"id"
+  },
+  "children":[
+    {
+      "_:component":"layout:touchable",
+      "properties":{
+        "onPress":[
+          {
+            "_:action":"push",
+            "properties":{
+              "url":"/edit.json",
+              "state":{
+                "note":"@{item}"
+              },
+              "events":{
+                "onNoteSaved":[
+                  {
+                    "_:action":"setState",
+                    "properties":{
+                      "path":"item.title",
+                      "value":"@{onNoteSaved.title}"
+                    }
+                  },
+                  {
+                    "_:action":"setState",
+                    "properties":{
+                      "path":"item.description",
+                      "value":"@{onNoteSaved.description}"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "children":[
+        {
+          "_:component":"layout:text",
+          "properties":{
+            "text":"@{item.title}: @{item.description}"
+          }
+        }
+      ]
+    }
+  ]
 }
 ```
 
-Suppose the navigation stack `['/home']`. The action above performs a navigation to the screen "$baseUrl/products" and after it completes the
-navigation stack becomes `['/home', '/products']`.
+edit.json
+```json
+{
+  "_:component": "layout:column",
+  "state": {
+    "title": "@{note.title}",
+    "description": "@{note.description}"
+  },
+  "children": [
+    {
+      "_:component": "myApp:textInput",
+      "properties": {
+        "label": "Title",
+        "value": "@{title}",
+        "onChange": [
+          {
+            "_:action": "setState",
+            "properties": {
+              "path": "title",
+              "value": "@{onChange}"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "_:component": "myApp:textInput",
+      "properties": {
+        "label": "Description",
+        "value": "@{description}",
+        "onChange": [
+          {
+            "_:action": "setState",
+            "properties": {
+              "path": "description",
+              "value": "@{onChange}"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "_:component": "myApp:button",
+      "properties": {
+        "text": "Save",
+        "onPress": [
+          {
+            "_:action": "triggerViewEvent",
+            "properties": {
+              "event": "onNoteSaved",
+              "value": "@{object('id', note.id, 'title', title, 'description', description)}"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
+```
 
 ## pop
 This action pops one screen from the navigation stack, effectively returning to the previous screen. A platform specific transition might be played

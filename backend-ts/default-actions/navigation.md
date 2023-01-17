@@ -113,7 +113,19 @@ interface ScreenRequest {
    * }
    * ```
    */
-  params?: Record<string, any>,
+  state?: Record<string, any>,
+  /**
+   * The events this screen can trigger.
+   * Each key is an event name. The value is the type of the implicit state created by the event.
+   * If this is a screen to edit a product, for instance, it could have the event `onSave` which tells the previous screen the product has been saved.
+   * The the implicit state created by `onSave` would be the product saved.
+   * ```typescript
+   * {
+   *   onSave: Product,
+   * }
+   * ```
+   */
+  events?: Record<string, any>,
 }
 ```
 
@@ -180,6 +192,14 @@ interface PushParams {
    * Component tree to show if the screen can't be fetched.
    */
   fallback?: Component,
+  /**
+   * The map of states that will be created on the next screen.
+   */
+  state?: Record<string, any>,
+  /**
+   * The actions to associate with the events the next screen can trigger.
+   */
+  events?: Record<string, Actions>,
 }
 
 interface PopToParams {

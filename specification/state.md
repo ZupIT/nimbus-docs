@@ -41,6 +41,9 @@ An expression string always start with `@{` and ends with `}`. To make a referen
 }
 ```
 
+> `state` is a map where each key is the state name and the value is the initial value for the state. If the initial value is an expression, it will
+be computed before being assigned.
+
 The UI above renders a text component written "John".
 
 > Attention: although expressions are strings, when rendered by the frontend they will be replaced by the state value. So if the state is a boolean,

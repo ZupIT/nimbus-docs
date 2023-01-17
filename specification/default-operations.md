@@ -48,14 +48,21 @@ results in `[4, 5]`.
 `@{removeIndex(ids, 1)}` results in `[4, 5]`.
 - `contains(array, element)`: returns `true` if the array contains an element equal to the second parameter. Returns `false` otherwise. Example:
 `@{contains(ids, 10)}` results in false and `@{contains(ids, 4)}` results in true.
-- `concat(...arrays)`: concatenate the arrays passed as parameter, i.e., unite them in a single array. Example: consider another state `inactiveIds`
+- `concat(...arrays)`: concatenates the arrays passed as parameter, i.e., unite them in a single array. Example: consider another state `inactiveIds`
 with the value `[62, 45, 12]`, `@{union(ids, inactiveIds)}` results in `[4, 20, 5, 62, 45, 12]`.
-- `eq(left, right)`: TODO
+- `eq(left, right)`: compares the left array with the right array and determines if they're equal. This is a deep comparison.
+- `array(...items)`: creates an array with the items passed as parameter.
 
 ## Map
-- `contains(map, key)`: TODO
-- `concat(...maps)`: TODO
-- `eq(left, right)`: TODO
+- `contains(map, key)`: verifies if `map` contains the key `key`.
+- `concat(...maps)`: concatenates the maps passed as parameter, i.e., unite them in a single map.
+- `eq(left, right)`: verifies if the map `left` is equal to the map `right`. This is a deep comparison.
+- `entries(map)`: extract all entries in a map into an array where each item is an object of type `{ key: string, value: any }`. Example:
+`state = { a: 1, b: 2, c: 3 }`, `operation = @{entries(state)}`, the result of the operation will be 
+`[{ key: 'a', value: 1 }, { key: 'b', value: 2 }, { key: 'c', value: 3 }]`.
+- `object(...items)`: creates an object with the items passed as parameter. Every two items represent a map entry, the first is the key and the
+second is the value. Example: `@{object('a', 1, 'b', 2, 'c', 3)}` results in `{ a: 1, b: 2, c: 3 }`. Every key that is not a string will be converted
+to string. An odd number of parameters will make the last entry have `null` as its value.
 
 ## Logic
 For the examples below, suppose the state `user` is a map where the key `age` is a number and the key `isEmancipated` is a boolean.
