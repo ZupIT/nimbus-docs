@@ -27,6 +27,8 @@ plugins {
 }
 
 dependencies {
+    // Compose navigation
+    implementation ("androidx.navigation:navigation-compose:2.5.1")
     // Nimbus compose base library
     implementation("br.com.zup.nimbus:nimbus-compose:$version")
     // Layout components for Nimbus
