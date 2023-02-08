@@ -9,8 +9,8 @@ You can configure the `NimbusSwiftUI` and `NimbusLayoutSwiftUI` using Xcode pack
 
 ### XCode
 
-1. Select `Xcode > File > Add Packages...`
-2. Add package repository: `https://github.com/ZupIT/nimbus-layout-swiftui.git` (use the tag 1.0.0-alpha$LATEST), where $LATEST is the latest alpha build.
+1. Select the menu option `File > Add Packages...`
+2. Add package repository: `https://github.com/ZupIT/nimbus-layout-swiftui.git` (use "exact version" and the value 1.0.0-beta$LATEST), where $LATEST is the latest beta build.
 3. Import the package in your source files: `import NimbusLayoutSwiftUI`
 
 ### Swift Package
