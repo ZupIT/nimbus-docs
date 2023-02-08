@@ -21,7 +21,7 @@ Add `NimbusLayoutSwiftUI` package dependency to your `Package.swift` file:
 let package = Package(
   ...
   dependencies: [
-    .package(url: "https://github.com/ZupIT/nimbus-layout-swiftui.git", from: "1.0.0-alpha1") // instead of alpha 1, use the latest alpha build.
+    .package(url: "https://github.com/ZupIT/nimbus-layout-swiftui.git", from: "1.0.0-beta.1") // instead of beta 1, use the latest beta build.
   ],
   targets: [
     .target(name: "YourPackage",
