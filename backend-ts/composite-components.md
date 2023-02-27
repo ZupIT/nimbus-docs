@@ -1,6 +1,6 @@
 # Composite components
 We use JSX to write our components. JSX are basically functions and the same way we can call functions from within
-other functions, we can call JSX components from withing other JSX components. We call these "composite components" or
+other functions, we can call JSX components from within other JSX components. We call these "composite components" or
 "screen fragments".
 
 For developers familiar with React, this is nothing new, but let's give an example: suppose we have a card UI in our
