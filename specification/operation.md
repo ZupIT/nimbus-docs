@@ -56,7 +56,7 @@ A very simple example for the use of operations is a screen with a counter. The 
 The example above uses an operation to change a state value based on the previous value.
 
 # Default operations
-Nimbus ships with some basic operations, you can check them [here](/default-operations.md).
+Nimbus ships with some basic operations, you can check them [here](default-operations.md).
 
 # Custom operations
 Just like [components](/component.md) and [actions](/action.md), Nimbus must provide a way for the developer to register new operations. Custom
